@@ -24,8 +24,8 @@
       function waterDropIcon() {
         return L.icon({
           iconUrl: 'waterdrop.png',
-          iconSize: [27, 40],
-          iconAnchor: [13, 40],
+          iconSize: [29, 40],
+          iconAnchor: [15, 40],
           popupAnchor: [1, -20],
         });
       }
@@ -59,6 +59,11 @@
         },
       });
       map.addLayer(drinkingWaterLayer);
+
+      function onLocationError(e) {
+        console.log(e.message);
+      }
+      map.on('locationerror', onLocationError);
 
       map.locate({
         setView: true,
