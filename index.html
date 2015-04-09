@@ -78,11 +78,14 @@
       function onLocationError(e) {
         console.log(e.message);
       }
-      map.on('locationerror', onLocationError);
 
       var locateControl = L.control.locate({
         icon: 'fa fa-map-marker',
         iconLoading: 'fa fa-spinner fa-spin',
+        onLocationError: onLocationError,
+        locatoOptions: {
+          maxZoom: 7,
+        },
       }).addTo(map);
       locateControl.start();
     </script>
