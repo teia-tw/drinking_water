@@ -21,6 +21,14 @@
   <body>
     <div id="map"></div>
     <script>
+      function waterDropIcon() {
+        return L.icon({
+          iconUrl: 'waterdrop.png',
+          iconSize: [27, 40],
+          iconAnchor: [13, 40],
+        });
+      }
+
       var attr_osm = '地圖資料 &copy; <a href="http://openstreetmap.org/">OpenStreetMap</a>';
       var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         opacity: 0.7,
@@ -31,7 +39,25 @@
       var map = new L.Map('map').addLayer(osm).setView(new L.LatLng(24, 121), 15);
 
       var drinkingWaterLayer = new L.OverPassLayer({
-        query: 'area(3600449220)->.searchArea;(node["amenity"="drinking_water"](area.searchArea);way["amenity"="drinking_water"](area.searchArea);relation["amenity"="drinking_water"](area.searchArea););out;'});
+        query: 'area(3600449220)->.searchArea;(node["amenity"="drinking_water"](area.searchArea);way["amenity"="drinking_water"](area.searchArea);relation["amenity"="drinking_water"](area.searchArea););out;',
+        callback: function(data) {
+          for(var i=0;i<data.elements.length;i++) {
+            var e = data.elements[i];
+            if (e.id in this.instance._ids) return;
+            this.instance._ids[e.id] = true;
+            var pos = new L.LatLng(e.lat, e.lon);
+            var popup = this.instance._poiInfo(e.tags,e.id);
+            var color = e.tags.collection_times ? 'green':'red';
+            var marker = L.marker(pos, {
+              icon: waterDropIcon(),
+              fillColor: '#fa3',
+              fillOpacity: 0.5
+            })
+            .bindPopup(popup);
+            this.instance.addLayer(marker);
+          }
+        },
+      });
       map.addLayer(drinkingWaterLayer);
 
       map.locate({
