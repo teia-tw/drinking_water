@@ -1,0 +1,24 @@
+{
+  "name": "drinking-water",
+  "version": "0.0.0",
+  "authors": [
+    "Pomin Wu <pomin5@gmail.com>"
+  ],
+  "keywords": [
+    "map",
+    "gis",
+    "leaflet"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "leaflet": "~0.7.3",
+    "leaflet-layer-overpass": "~1.0.1"
+  }
+}
