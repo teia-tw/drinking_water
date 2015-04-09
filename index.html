@@ -72,6 +72,12 @@
       });
       map.addLayer(drinkingWaterLayer);
 
+      function onLocationFound(e) {
+        var radius = 10;
+        L.circle(e.latlng, radius, { color: '#9e7233' }).addTo(map);
+      }
+      map.on('locationfound', onLocationFound);
+
       function onLocationError(e) {
         console.log(e.message);
       }
