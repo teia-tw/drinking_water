@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8"/>
     <title>飲水地圖</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script src="leaflet.js"></script>
     <script src="OverPassLayer.js"></script>
     <script src="L.Control.Locate.min.js"></script>
@@ -29,6 +30,40 @@
   </head>
   <body>
     <div id="map"></div>
+    <style>
+      #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+        background: #000;
+        filter: alpha(opacity=50);
+      }
+      #modal {
+        position: absolute;
+        background: url(tint20.png) 0 0 repeat;
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 14px;
+        padding: 8px;
+      }
+      #content {
+        border-radius: 8px;
+        background: #fff;
+        padding: 20px;
+      }
+      #close {
+        position:absolute;
+        background:url(close.png) 0 0 no-repeat;
+        width:24px;
+        height:27px;
+        display:block;
+        text-indent:-9999px;
+        top:-7px;
+        right:-7px;
+      }
+    </style>
     <script>
       function waterDropIcon() {
         return L.icon({
@@ -99,9 +134,64 @@
       }).addTo(map);
       locateControl.start();
 
+      var modal = (function () {
+        var method = {};
+        var $overlay = $('<div id="overlay"></div>');
+        var $modal = $('<div id="modal"></div>');
+        var $content = $('<div id="content"></div>');
+        var $close = $('<a id="close" href="#">close</a>');
+
+        // Append the HTML
+        $modal.hide();
+        $overlay.hide();
+        $modal.append($content, $close);
+        $(document).ready(function () {
+          $('body').append($overlay, $modal);
+        });
+
+        // Center the modal in the viewport
+        method.center = function () {
+          var top, left;
+          top = Math.max($(window).height() - $modal.outerHeight(), 0) / 2;
+          left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2;
+          $modal.css({
+              top: top + $(window).scrollTop(),
+              left: left + $(window).scrollLeft()
+          });
+        };
+        // Open the modal
+        method.open = function (settings) {
+          $content.empty().append(settings.content);
+          $modal.css({
+              width: settings.width || 'auto',
+              height: settings.height || 'auto'
+          })
+          method.center();
+          $(window).bind('resize.modal', method.center);
+          $modal.show();
+          $overlay.show();
+        };
+        // Close the modal
+        method.close = function () {
+          $modal.hide();
+          $overlay.hide();
+          $content.empty();
+          $(window).unbind('resize.modal');
+        };
+        $close.click(function(e){
+            e.preventDefault();
+            method.close();
+        });
+        return method;
+      })();
+
       function onAbout(e) {
+        modal.open({
+          content: '<p>一個600ml的瓶裝水，需要耗費600ml的6~7倍水量製造它的塑膠瓶！在缺水的時代來臨時，別再讓塑膠瓶跟我們搶水資源了！</p><p>自備環保杯是個絕佳的選擇，但是喝完自備的水後怎麼辦？</p><p>從現在開始，我們要讓帶環保杯的朋友，可以快速的找到補水地點，讓大家隨心所欲的喝水保健康。</p><p>此外，<a href="http://www.e-info.org.tw/">台灣環境資訊協會</a>懇請大家，少喝瓶裝水，努力減少塑膠瓶及瓶蓋等海洋垃圾，減少海鳥、海龜、鯨豚…等海洋生物吞食這些塑膠垃圾而痛苦至死。您的努力，也將是他們活命的機會！</p>',
+          width: $(window).width() / 1.5,
+        });
       }
-      L.easyButton('fa fa-question-circl', onAbout, '關於飲水地圖', map);
+      L.easyButton('fa fa-question-circle', onAbout, '關於飲水地圖', map);
     </script>
   </body>
 </html>
