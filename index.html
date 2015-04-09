@@ -5,8 +5,11 @@
     <title>飲水地圖</title>
     <script src="leaflet.js"></script>
     <script src="OverPassLayer.js"></script>
+    <script src="L.Control.Locate.min.js"></script>
     <link rel="stylesheet" href="leaflet.css">
     <link rel="stylesheet" href="OverPassLayer.css">
+    <link rel="stylesheet" href="L.Control.Locate.min.css">
+    <link rel="stylesheet" href="font-awesome.min.css">
     <style type="text/css" media="screen">
       body {
         padding: 0;
@@ -72,21 +75,16 @@
       });
       map.addLayer(drinkingWaterLayer);
 
-      function onLocationFound(e) {
-        var radius = 10;
-        L.circle(e.latlng, radius, { color: '#9e7233' }).addTo(map);
-      }
-      map.on('locationfound', onLocationFound);
-
       function onLocationError(e) {
         console.log(e.message);
       }
       map.on('locationerror', onLocationError);
 
-      map.locate({
-        setView: true,
-        maxZoom: 15,
-      });
+      var locateControl = L.control.locate({
+        icon: 'fa fa-map-marker',
+        iconLoading: 'fa fa-spinner fa-spin',
+      }).addTo(map);
+      locateControl.start();
     </script>
   </body>
 </html>
