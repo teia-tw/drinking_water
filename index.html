@@ -18,6 +18,11 @@
       html, body, #map {
         height: 100%;
       }
+      .leaflet-popup-content .name {
+        font-weight: bold;
+        font-size: 1.2em;
+        line-height: 2.1;
+      }
     </style>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalabel=no"/>
   </head>
@@ -53,7 +58,12 @@
             this.instance._ids[e.id] = true;
             var pos = new L.LatLng(e.lat, e.lon);
             var popup = '<div>'
-              + '<h3>' + e.tags.name + '</h3>'
+              + '<div class="name">' + e.tags.name + '</div>'
+              + '<div class="water">'
+              + (e.tags.cold_water ? '<img src="iced.png"/>' : '')
+              + (e.tags.warm_water ? '<img src="warm.png"/>' : '')
+              + (e.tags.hot_water ? '<img src="hot.png"/>' : '')
+              + '</div>'
               + (e.tags.description ? '<div class="description">' + e.tags.description + '</div>' : '')
               + (e.tags.level ? '<div class="level">' + e.tags.level + '</div>' : '')
               + '</div>';
