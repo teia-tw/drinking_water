@@ -19,10 +19,9 @@
 
       var map = new L.Map('map').addLayer(osm).setView(new L.LatLng(24, 121), 15);
 
-      //OverPassAPI overlay
-      var opl = new L.OverPassLayer({
-        query: 'area(3600449220)->.searchArea;(node["amenity"="drinking_water"](area.searchArea);way["amenity"="drinking_water"](area.searchArea);relation["amenity"="drinking_water"](area.searchArea););out;',});
-      map.addLayer(opl);
+      var drinkingWaterLayer = new L.OverPassLayer({
+        query: 'area(3600449220)->.searchArea;(node["amenity"="drinking_water"](area.searchArea);way["amenity"="drinking_water"](area.searchArea);relation["amenity"="drinking_water"](area.searchArea););out;'});
+      map.addLayer(drinkingWaterLayer);
     </script>
   </body>
 </html>
