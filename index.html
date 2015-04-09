@@ -33,6 +33,11 @@
       var drinkingWaterLayer = new L.OverPassLayer({
         query: 'area(3600449220)->.searchArea;(node["amenity"="drinking_water"](area.searchArea);way["amenity"="drinking_water"](area.searchArea);relation["amenity"="drinking_water"](area.searchArea););out;'});
       map.addLayer(drinkingWaterLayer);
+
+      map.locate({
+        setView: true,
+        maxZoom: 15,
+      });
     </script>
   </body>
 </html>
