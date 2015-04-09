@@ -84,7 +84,7 @@
       var map = new L.Map('map').addLayer(osm).setView(new L.LatLng(24, 121), 15);
 
       var drinkingWaterLayer = new L.OverPassLayer({
-        query: 'area(3600449220)->.searchArea;(node["amenity"="drinking_water"](area.searchArea);node["drinking_water"="yes"](area.searchArea);way["amenity"="drinking_water"](area.searchArea);relation["amenity"="drinking_water"](area.searchArea););out;',
+        query: 'area(3600449220)->.searchArea;(node["amenity"="drinking_water"](area.searchArea);node["drinking_water"="yes"](area.searchArea);way["amenity"="drinking_water"](area.searchArea);way["drinking_water"="yes"](area.searchArea);relation["amenity"="drinking_water"](area.searchArea););out;',
         callback: function (data) {
           for(var i = 0; i < data.elements.length; i++) {
             var e = data.elements[i];
