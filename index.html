@@ -6,6 +6,7 @@
     <script src="leaflet.js"></script>
     <script src="OverPassLayer.js"></script>
     <script src="L.Control.Locate.min.js"></script>
+    <script src="easy-button.js"></script>
     <link rel="stylesheet" href="leaflet.css">
     <link rel="stylesheet" href="OverPassLayer.css">
     <link rel="stylesheet" href="L.Control.Locate.min.css">
@@ -97,6 +98,10 @@
         },
       }).addTo(map);
       locateControl.start();
+
+      function onAbout(e) {
+      }
+      L.easyButton('fa fa-question-circl', onAbout, '關於飲水地圖', map);
     </script>
   </body>
 </html>
