@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalabel=no"/>
     <title>飲水地圖</title>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script src="leaflet.js"></script>
@@ -13,23 +14,14 @@
     <link rel="stylesheet" href="L.Control.Locate.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <style type="text/css" media="screen">
-      body {
-        padding: 0;
-        margin: 0;
-      }
-      html, body, #map {
-        height: 100%;
-      }
+      body { padding: 0; margin: 0; }
+      html, body, #map { height: 100%; }
       .leaflet-popup-content .name {
         font-weight: bold;
         font-size: 1.2em;
         line-height: 2.1;
       }
     </style>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalabel=no"/>
-  </head>
-  <body>
-    <div id="map"></div>
     <style>
       #overlay {
         position: fixed;
@@ -64,75 +56,13 @@
         right:-7px;
       }
     </style>
+  </head>
+  <body>
+    <div id="map"></div>
     <script>
-      function waterDropIcon() {
-        return L.icon({
-          iconUrl: 'waterdrop.png',
-          iconSize: [29, 40],
-          iconAnchor: [15, 40],
-          popupAnchor: [1, -20],
-        });
+      function screenSize() {
+        return $(window).width() > 400 ? 'large' : 'small';
       }
-
-      var attr_osm = '地圖資料 &copy; <a href="http://openstreetmap.org/">OpenStreetMap</a>';
-      var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        opacity: 0.7,
-        maxZoom: 18,
-        attribution: attr_osm,
-      });
-
-      var map = new L.Map('map').addLayer(osm).setView(new L.LatLng(24, 121), 15);
-
-      var drinkingWaterLayer = new L.OverPassLayer({
-        query: 'area(3600449220)->.searchArea;(node["amenity"="drinking_water"](area.searchArea);node["drinking_water"="yes"](area.searchArea);way["amenity"="drinking_water"](area.searchArea);way["drinking_water"="yes"](area.searchArea);rel["amenity"="drinking_water"](area.searchArea);rel["drinking_water"="yes"](area.searchArea););out;',
-        callback: function (data) {
-          for(var i = 0; i < data.elements.length; i++) {
-            var e = data.elements[i];
-            if (e.id in this.instance._ids) return;
-            e.tags.name = e.tags.name || '飲水機';
-            e.tags.level = e.tags.level ? (+e.tags.level < 0 ? '地下 ' + -e.tags.level : e.tags.level) + ' 樓' : undefined;
-            this.instance._ids[e.id] = true;
-            var pos = new L.LatLng(e.lat, e.lon);
-            var popup = '<div>'
-              + '<div class="name">' + e.tags.name + '</div>'
-              + '<div class="water">'
-              + (e.tags.cold_water ? '<img src="iced.png"/>' : '')
-              + (e.tags.warm_water ? '<img src="warm.png"/>' : '')
-              + (e.tags.hot_water ? '<img src="hot.png"/>' : '')
-              + '</div>'
-              + (e.tags.description ? '<div class="description">' + e.tags.description + '</div>' : '')
-              + (e.tags.level ? '<div class="level">' + e.tags.level + '</div>' : '')
-              + '</div>';
-            var color = e.tags.collection_times ? 'green':'red';
-            var marker = L.marker(pos, {
-              icon: waterDropIcon(),
-              fillColor: '#fa3',
-              fillOpacity: 0.5
-            }).bindPopup(popup);
-            this.instance.addLayer(marker);
-          }
-        },
-        minZoomIndicatorOptions: {
-          position: 'topright',
-          minZoomMessageNoLayer: '',
-          minZoomMessage: '',
-        },
-      });
-      map.addLayer(drinkingWaterLayer);
-
-      function onLocationError(e) {
-        console.log(e.message);
-      }
-
-      var locateControl = L.control.locate({
-        icon: 'fa fa-map-marker',
-        iconLoading: 'fa fa-spinner fa-spin',
-        onLocationError: onLocationError,
-        locateOptions: {
-          maxZoom: 16,
-        },
-      }).addTo(map);
-      locateControl.start();
 
       var modal = (function () {
         var method = {};
@@ -179,19 +109,114 @@
           $(window).unbind('resize.modal');
         };
         $close.click(function(e){
-            e.preventDefault();
-            method.close();
+          e.preventDefault();
+          method.close();
         });
         return method;
       })();
 
-      function onAbout(e) {
-        modal.open({
-          content: '<p>一個600ml的瓶裝水，需要耗費600ml的6~7倍水量製造它的塑膠瓶！在缺水的時代來臨時，別再讓塑膠瓶跟我們搶水資源了！</p><p>自備環保杯是個絕佳的選擇，但是喝完自備的水後怎麼辦？</p><p>從現在開始，我們要讓帶環保杯的朋友，可以快速的找到補水地點，讓大家隨心所欲的喝水保健康。</p><p>此外，<a href="http://www.e-info.org.tw/" target="_blank">台灣環境資訊協會</a>懇請大家，少喝瓶裝水，努力減少塑膠瓶及瓶蓋等海洋垃圾，減少海鳥、海龜、鯨豚…等海洋生物吞食這些塑膠垃圾而痛苦至死。您的努力，也將是他們活命的機會！</p><p><a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a></p>',
-          width: $(window).width() > 400 ? $(window).width() / 1.5 : $(window).width() / 1.1
+      function osmLayer() {
+        var attr_osm = '地圖資料 &copy; <a href="http://osm.org/copyright">OpenStreetMap</a>';
+        return new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          opacity: 0.7,
+          maxZoom: 18,
+          attribution: attr_osm,
         });
       }
-      L.easyButton('fa fa-question-circle', onAbout, '關於飲水地圖', map);
+
+      function waterDropIcon() {
+        return L.icon({
+          iconUrl: 'waterdrop.png',
+          iconSize: [29, 40],
+          iconAnchor: [15, 40],
+          popupAnchor: [1, -20],
+        });
+      }
+
+      function drinkingWaterLayer() {
+        return function () {
+          var map = this;
+          var l = new L.OverPassLayer({
+            query: 'area(3600449220)->.searchArea;(node["amenity"="drinking_water"](area.searchArea);node["drinking_water"="yes"](area.searchArea);way["amenity"="drinking_water"](area.searchArea);way["drinking_water"="yes"](area.searchArea);rel["amenity"="drinking_water"](area.searchArea);rel["drinking_water"="yes"](area.searchArea););out;',
+            callback: function (data) {
+              for(var i = 0; i < data.elements.length; i++) {
+                var e = data.elements[i];
+                if (e.id in this.instance._ids) return;
+                e.tags.name = e.tags.name || '飲水機';
+                e.tags.level = e.tags.level ? (+e.tags.level < 0 ? '地下 ' + -e.tags.level : e.tags.level) + ' 樓' : undefined;
+                this.instance._ids[e.id] = true;
+                var pos = new L.LatLng(e.lat, e.lon);
+                var popup = '<div>'
+                  + '<div class="name">' + e.tags.name + '</div>'
+                  + '<div class="water">'
+                  + (e.tags.cold_water ? '<img src="iced.png"/>' : '')
+                  + (e.tags.warm_water ? '<img src="warm.png"/>' : '')
+                  + (e.tags.hot_water ? '<img src="hot.png"/>' : '')
+                  + '</div>'
+                  + (e.tags.description ? '<div class="description">' + e.tags.description + '</div>' : '')
+                  + (e.tags.level ? '<div class="level">' + e.tags.level + '</div>' : '')
+                  + '</div>';
+                var marker = L.marker(pos, {
+                    icon: waterDropIcon(),
+                    fillColor: '#fa3',
+                    fillOpacity: 0.5
+                  })
+                  .bindPopup(popup);
+                this.instance.addLayer(marker);
+              }
+            },
+            minZoomIndicatorOptions: {
+              position: 'topright',
+              minZoomMessageNoLayer: '',
+              minZoomMessage: '',
+            },
+          });
+          map.addLayer(l);
+        };
+      }
+
+      function locator(options) {
+        options = undefined !== options ? options : {};
+        return function () {
+          var map = this;
+          function onLocationError(e) {
+            console.log(e.message);
+          }
+          var control = L.control.locate({
+              icon: 'fa fa-map-marker',
+              iconLoading: 'fa fa-spinner fa-spin',
+              onLocationError: onLocationError,
+              locateOptions: {
+                maxZoom: 16,
+              },
+            })
+            .addTo(map);
+          if (undefined === options.start || options.start) {
+            control.start();
+          }
+        };
+      }
+
+      function aboutPage() {
+        return function () {
+          var map = this;
+          function onClick(e) {
+            modal.open({
+              content: '<p>一個600ml的瓶裝水，需要耗費600ml的6~7倍水量製造它的塑膠瓶！在缺水的時代來臨時，別再讓塑膠瓶跟我們搶水資源了！</p><p>自備環保杯是個絕佳的選擇，但是喝完自備的水後怎麼辦？</p><p>從現在開始，我們要讓帶環保杯的朋友，可以快速的找到補水地點，讓大家隨心所欲的喝水保健康。</p><p>此外，<a href="http://www.e-info.org.tw/" target="_blank">台灣環境資訊協會</a>懇請大家，少喝瓶裝水，努力減少塑膠瓶及瓶蓋等海洋垃圾，減少海鳥、海龜、鯨豚…等海洋生物吞食這些塑膠垃圾而痛苦至死。您的努力，也將是他們活命的機會！</p><p><a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a></p>',
+              width: screenSize() === 'large' ? $(window).width() / 1.5 : $(window).width() / 1.1
+            });
+          }
+          L.easyButton('fa fa-question-circle', onClick, '關於飲水地圖', map);
+        };
+      }
+
+      var map = new L.Map('map')
+        .addLayer(osmLayer())
+        .on('load', drinkingWaterLayer())
+        .on('load', locator())
+        .on('load', aboutPage())
+        //.setView(new L.LatLng(23.5, 120), 8);
+        .setView(new L.LatLng(24, 121), 15);
     </script>
   </body>
 </html>
