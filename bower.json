@@ -19,6 +19,7 @@
   ],
   "dependencies": {
     "leaflet": "~0.7.3",
-    "leaflet-layer-overpass": "~1.0.1"
+    "leaflet-layer-overpass": "~1.0.1",
+    "font-awesome": "~4.3.0"
   }
 }
