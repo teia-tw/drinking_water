@@ -2,7 +2,7 @@
 飲水地圖
 ========
 
-http://water.e-info.org.tw/waterforfree
+http://drinking.teia.tw/
 
 一個600ml的瓶裝水，需要耗費600ml的6~7倍水量製造它的塑膠瓶！在缺水的時代來臨時，別再讓塑膠瓶跟我們搶水資源了！
 
