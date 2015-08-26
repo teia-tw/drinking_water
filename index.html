@@ -75,8 +75,10 @@
         return $(window).width() > 400 ? 'large' : 'small';
       }
 
-      var modal = (function () {
-        var method = {};
+      function aboutModal (s) {
+        var settings = s || {}
+        var component = {};
+
         var $overlay = $('<div id="overlay"></div>');
         var $modal = $('<div id="modal"></div>');
         var $content = $('<div id="content"></div>');
@@ -86,12 +88,12 @@
         $modal.hide();
         $overlay.hide();
         $modal.append($content, $close);
-        $(document).ready(function () {
-          $('body').append($overlay, $modal);
-        });
 
-        // Center the modal in the viewport
-        method.center = function () {
+        component.mount = function () {
+          $('body').append($overlay, $modal);
+        }
+
+        component.center = function () {
           var top, left;
           top = Math.max($(window).height() - $modal.outerHeight(), 0) / 2;
           left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2;
@@ -100,31 +102,47 @@
               left: left + $(window).scrollLeft()
           });
         };
-        // Open the modal
-        method.open = function (settings) {
+
+        component.open = function () {
           $content.empty().append(settings.content);
           $modal.css({
               width: settings.width || 'auto',
               height: settings.height || 'auto'
           })
-          method.center();
-          $(window).bind('resize.modal', method.center);
+          component.center();
+          $(window).bind('resize.modal', component.center);
           $modal.show();
           $overlay.show();
         };
-        // Close the modal
-        method.close = function () {
+
+        component.close = function () {
           $modal.hide();
           $overlay.hide();
           $content.empty();
           $(window).unbind('resize.modal');
         };
+
         $close.click(function(e){
           e.preventDefault();
-          method.close();
+          component.close();
         });
-        return method;
-      })();
+
+        component.mapButton = function (settings) {
+          return function () {
+            var map = this;
+            function onClick(e) {
+              component.open();
+            }
+            L.easyButton('fa fa-question-circle', onClick, '關於飲水地圖', map);
+          };
+        }
+
+        return component;
+      }
+      var about = aboutModal({
+        content: '<p>一個600ml的瓶裝水，需要耗費600ml的6~7倍水量製造它的塑膠瓶！在缺水的時代來臨時，別再讓塑膠瓶跟我們搶水資源了！</p><p>自備環保杯是個絕佳的選擇，但是喝完自備的水後怎麼辦？</p><p>從現在開始，我們要讓帶環保杯的朋友，可以快速的找到補水地點，讓大家隨心所欲的喝水保健康。</p><p>此外，<a href="http://www.e-info.org.tw/" target="_blank">台灣環境資訊協會</a>懇請大家，少喝瓶裝水，努力減少塑膠瓶及瓶蓋等海洋垃圾，減少海鳥、海龜、鯨豚…等海洋生物吞食這些塑膠垃圾而痛苦至死。您的努力，也將是他們活命的機會！</p><p><a href="https://osmtw.hackpad.com/afSMeOLuHkR" target="_blank">計劃網站</a></p><p><a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">一起編輯飲水地圖</p><p><a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a></p>',
+        width: screenSize() === 'large' ? $(window).width() / 1.5 : $(window).width() / 1.1
+      })
 
       function osmLayer() {
         var attr_osm = '地圖資料 &copy; <a href="http://osm.org/copyright">OpenStreetMap</a>';
@@ -209,26 +227,14 @@
         };
       }
 
-      function aboutPage() {
-        return function () {
-          var map = this;
-          function onClick(e) {
-            modal.open({
-                                          content: '<p>一個600ml的瓶裝水，需要耗費600ml的6~7倍水量製造它的塑膠瓶！在缺水的時代來臨時，別再讓塑膠瓶跟我們搶水資源了！</p><p>自備環保杯是個絕佳的選擇，但是喝完自備的水後怎麼辦？</p><p>從現在開始，我們要讓帶環保杯的朋友，可以快速的找到補水地點，讓大家隨心所欲的喝水保健康。</p><p>此外，<a href="http://www.e-info.org.tw/" target="_blank">台灣環境資訊協會</a>懇請大家，少喝瓶裝水，努力減少塑膠瓶及瓶蓋等海洋垃圾，減少海鳥、海龜、鯨豚…等海洋生物吞食這些塑膠垃圾而痛苦至死。您的努力，也將是他們活命的機會！</p><p><a href="https://osmtw.hackpad.com/afSMeOLuHkR" target="_blank">計劃網站</a></p><p><a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">一起編輯飲水地圖</p><p><a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a></p>',
-              width: screenSize() === 'large' ? $(window).width() / 1.5 : $(window).width() / 1.1
-            });
-          }
-          L.easyButton('fa fa-question-circle', onClick, '關於飲水地圖', map);
-        };
-      }
-
       var map = new L.Map('map')
         .addLayer(osmLayer())
         .on('load', drinkingWaterLayer())
         .on('load', locator())
-        .on('load', aboutPage())
+        .on('load', about.mapButton())
 
       var onReady = function () {
+        about.mount()
         map
           .setView(new L.LatLng(25.0003133, 121.5388148), 15);
       }
