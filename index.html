@@ -227,8 +227,13 @@
         .on('load', drinkingWaterLayer())
         .on('load', locator())
         .on('load', aboutPage())
-        //.setView(new L.LatLng(23.5, 120), 8);
-        .setView(new L.LatLng(24, 121), 15);
+
+      var onReady = function () {
+        map
+          .setView(new L.LatLng(25.0003133, 121.5388148), 15);
+      }
+
+      $(document).ready(onReady)
     </script>
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
