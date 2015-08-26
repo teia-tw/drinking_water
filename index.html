@@ -75,6 +75,38 @@
         return $(window).width() > 400 ? 'large' : 'small';
       }
 
+      var map = new L.Map('map')
+
+      function userLocator(s) {
+        var settings = s || {
+          maxZoom: 16
+        };
+        var component = {}
+
+        component.locate = function () {
+          map.locate(settings)
+        }
+
+        component.mapButton = function () {
+          return function () {
+            var map = this;
+            function onLocationError(e) {
+              console.log(e.message);
+            }
+            var control = L.control.locate({
+                icon: 'fa fa-map-marker',
+                iconLoading: 'fa fa-spinner fa-spin',
+                onLocationError: onLocationError,
+                locatesettings: settings
+              })
+              .addTo(map);
+          }
+        }
+
+        return component
+      }
+      var locator = userLocator({ map: map, maxZoom: 16 })
+
       function aboutModal (s) {
         var settings = s || {}
         var component = {};
@@ -84,7 +116,6 @@
         var $content = $('<div id="content"></div>');
         var $close = $('<a id="close" href="#">close</a>');
 
-        // Append the HTML
         $modal.hide();
         $overlay.hide();
         $modal.append($content, $close);
@@ -205,40 +236,18 @@
         };
       }
 
-      function locator(options) {
-        options = undefined !== options ? options : {};
-        return function () {
-          var map = this;
-          function onLocationError(e) {
-            console.log(e.message);
-          }
-          var control = L.control.locate({
-              icon: 'fa fa-map-marker',
-              iconLoading: 'fa fa-spinner fa-spin',
-              onLocationError: onLocationError,
-              locateOptions: {
-                maxZoom: 16,
-              },
-            })
-            .addTo(map);
-          if (undefined === options.start || options.start) {
-            control.start();
-          }
-        };
-      }
-
-      var map = new L.Map('map')
+      map
         .addLayer(osmLayer())
         .on('load', drinkingWaterLayer())
-        .on('load', locator())
+        .on('load', locator.mapButton())
         .on('load', about.mapButton())
 
-      var onReady = function () {
+      function onReady () {
         about.mount()
+        about.open()
         map
           .setView(new L.LatLng(25.0003133, 121.5388148), 15);
       }
-
       $(document).ready(onReady)
     </script>
     <script>
