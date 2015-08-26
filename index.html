@@ -66,6 +66,11 @@
         top:-7px;
         right:-7px;
       }
+      #locator {
+        position: absolute;
+        bottom: 50px;
+        right: 40px;
+      }
     </style>
   </head>
   <body>
@@ -77,35 +82,62 @@
 
       var map = new L.Map('map')
 
-      function userLocator(s) {
+      function userLocator(map, s) {
         var settings = s || {
+          setView: true,
           maxZoom: 16
         };
         var component = {}
+        var button
+
+        function onLocationFound (e) {
+          console.log(e.message)
+        }
+        function onLocationError (e) {
+          console.log(e.message)
+        }
+        map.on('locationfound', onLocationFound)
+        map.on('locationerror', onLocationError)
 
         component.locate = function () {
           map.locate(settings)
         }
 
+        component.button = function () {
+          if (arguments.length === 1) {
+            button = arguments[0]
+            return component
+          }
+          if (button === undefined) {
+            button = L.control.locate({
+              icon: 'fa fa-map-marker',
+              iconLoading: 'fa fa-spinner fa-spin',
+              onLocationError: onLocationError,
+              locatesettings: settings
+            })
+          }
+          return button
+        }
+
+        component.start = function () {
+          component.button().start()
+        }
+
+        component.stop = function () {
+          component.button().stop()
+        }
+
+
         component.mapButton = function () {
           return function () {
             var map = this;
-            function onLocationError(e) {
-              console.log(e.message);
-            }
-            var control = L.control.locate({
-                icon: 'fa fa-map-marker',
-                iconLoading: 'fa fa-spinner fa-spin',
-                onLocationError: onLocationError,
-                locatesettings: settings
-              })
-              .addTo(map);
+            component.button().addTo(map);
           }
         }
 
         return component
       }
-      var locator = userLocator({ map: map, maxZoom: 16 })
+      var locator = userLocator(map)
 
       function aboutModal (s) {
         var settings = s || {}
@@ -115,10 +147,12 @@
         var $modal = $('<div id="modal"></div>');
         var $content = $('<div id="content"></div>');
         var $close = $('<a id="close" href="#">close</a>');
+        var $locator = $('<a id="locator" href="#">顯示我的位置</a>')
 
         $modal.hide();
         $overlay.hide();
         $modal.append($content, $close);
+        $modal.append($content, $locator)
 
         component.mount = function () {
           $('body').append($overlay, $modal);
@@ -157,6 +191,13 @@
           e.preventDefault();
           component.close();
         });
+
+        $locator.click(function (e) {
+          e.preventDefault()
+          console.log(locator.button())
+          locator.start()
+          component.close()
+        })
 
         component.mapButton = function (settings) {
           return function () {
