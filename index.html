@@ -197,6 +197,7 @@
         };
 
         component.open = function () {
+          $('.leaflet-control').css('display', 'none')
           $modal.css({
               width: settings.width || 'auto',
               height: settings.height || 'auto'
@@ -208,6 +209,7 @@
         };
 
         component.close = function () {
+          $('.leaflet-control').css('display', 'inherit')
           $modal.hide();
           $overlay.hide();
           $(window).unbind('resize.modal');
@@ -316,13 +318,6 @@
         .on('load', drinkingWaterLayer())
         .on('load', locator.mapButton())
         .on('load', about.mapButton())
-        .on('load', function () {
-          if (about.showNextTime()) {
-            about.open()
-          } else {
-            locator.start()
-          }
-        })
         .on('load', (function () {
           return function () {
             L.control.graphicScale({
@@ -332,6 +327,14 @@
             }).addTo(this)
           }
         })())
+        .on('load', function () {
+        if (about.showNextTime()) {
+          about.open()
+        }
+          if (!about.showNextTime()) {
+            locator.start()
+          }
+        })
 
       function onReady () {
         about.mount()
