@@ -110,10 +110,11 @@
         var circle
 
         function onLocationFound (e) {
+          console.log(e)
           if (circle === undefined) {
-            circle = L.circle(e.latlng, 250).addTo(map)
+            circle = L.circle(e.latlng, 200).addTo(map)
           } else {
-            circle.setLatLng(e.latlng)
+            circle.setLatLng(e.latlng).setRadius(200)
           }
         }
 
@@ -123,6 +124,11 @@
 
         map.on('locationfound', onLocationFound)
         map.on('locationerror', onLocationError)
+        map.on('stopfollowing', function (e) {
+          if (circle !== undefined) {
+            circle.setRadius(0)
+          }
+        })
 
         component.button = function () {
           if (arguments.length === 1) {
@@ -134,7 +140,7 @@
               icon: 'fa fa-map-marker',
               iconLoading: 'fa fa-spinner fa-spin',
               drawCircle: false,
-              follow: false,
+              follow: true,
               onLocationError: onLocationError,
               locateOptions: settings
             })
