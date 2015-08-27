@@ -18,12 +18,14 @@
     <script src="leaflet.js"></script>
     <script src="OverPassLayer.js"></script>
     <script src="L.Control.Locate.min.js"></script>
+    <script src="Leaflet.GraphicScale.min.js"></script>
     <script src="easy-button.js"></script>
 
-    <link rel="stylesheet" href="leaflet.css">
-    <link rel="stylesheet" href="OverPassLayer.css">
-    <link rel="stylesheet" href="L.Control.Locate.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="leaflet.css"/>
+    <link rel="stylesheet" href="OverPassLayer.css"/>
+    <link rel="stylesheet" href="L.Control.Locate.min.css"/>
+    <link rel="stylesheet" href="Leaflet.GraphicScale.min.css"/>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
     <style type="text/css" media="screen">
       body { padding: 0; margin: 0; }
       html, body, #map { height: 100%; }
@@ -276,6 +278,15 @@
         .on('load', drinkingWaterLayer())
         .on('load', locator.mapButton())
         .on('load', about.mapButton())
+        .on('load', (function () {
+          return function () {
+            L.control.graphicScale({
+              fill: 'hollow',
+              imperial: false,
+              updateWhenIdle: true
+            }).addTo(this)
+          }
+        })())
 
       function onReady () {
         about.mount()
