@@ -103,17 +103,24 @@
       function userLocator(map, s) {
         var settings = s || {
           setView: true,
-          maxZoom: 16
+          maxZoom: 17
         };
         var component = {}
         var button
+        var circle
 
         function onLocationFound (e) {
-          // console.log(e.message)
+          if (circle === undefined) {
+            circle = L.circle(e.latlng, 250).addTo(map)
+          } else {
+            circle.setLatLng(e.latlng)
+          }
         }
+
         function onLocationError (e) {
-          // console.log(e.message)
+          console.log(e)
         }
+
         map.on('locationfound', onLocationFound)
         map.on('locationerror', onLocationError)
 
@@ -126,8 +133,10 @@
             button = L.control.locate({
               icon: 'fa fa-map-marker',
               iconLoading: 'fa fa-spinner fa-spin',
+              drawCircle: false,
+              follow: false,
               onLocationError: onLocationError,
-              locatesettings: settings
+              locateOptions: settings
             })
           }
           return button
