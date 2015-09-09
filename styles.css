@@ -1,0 +1,49 @@
+body { padding: 0; margin: 0; }
+html, body, #map { height: 100%; }
+.leaflet-popup-content .name {
+  font-weight: bold;
+  font-size: 1.2em;
+  line-height: 2.1;
+}
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  background: #000;
+  filter: alpha(opacity=50);
+}
+#modal {
+  position: absolute;
+  background: url(tint20.png) 0 0 repeat;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 14px;
+  padding: 8px;
+}
+#content {
+  border-radius: 8px;
+  background: #fff;
+  padding: 20px;
+}
+#close {
+  position:absolute;
+  background:url(close.png) 0 0 no-repeat;
+  width:24px;
+  height:27px;
+  display:block;
+  text-indent:-9999px;
+  top:-7px;
+  right:-7px;
+}
+#locator {
+  position: absolute;
+  bottom: 70px;
+  right: 40px;
+}
+#showNextTime {
+  position: absolute;
+  bottom: 25px;
+  right: 40px;
+}
