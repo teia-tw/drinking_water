@@ -191,6 +191,10 @@
             var popup = '<div>' +
               '<div class="name">' + e.tags.name + '</div>' +
               '<div class="water">' +
+              (e.tags['drinking_water:iced_water'] ? '<img src="iced.png"/>' : '') +
+              (e.tags['drinking_water:cold_water'] ? '<img src="cold.png"/>' : '') +
+              (e.tags['drinking_water:warm_water'] ? '<img src="warm.png"/>' : '') +
+              (e.tags['drinking_water:hot_water'] ? '<img src="hot.png"/>' : '') +
               (e.tags.iced_water ? '<img src="iced.png"/>' : '') +
               (e.tags.cold_water ? '<img src="cold.png"/>' : '') +
               (e.tags.warm_water ? '<img src="warm.png"/>' : '') +
