@@ -120,6 +120,11 @@
       $(window).unbind('resize.modal')
     }
 
+    $overlay.click(function (e) {
+      e.preventDefault()
+      component.close()
+    })
+
     $close.click(function (e) {
       e.preventDefault()
       component.close()
