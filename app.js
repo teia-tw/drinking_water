@@ -10,23 +10,22 @@
     var component = {}
     var $dialog = $('<div class="add-station dialog"></div>')
     var $overlay = $('<div class="add-station dialog overlay"></div>')
-    var $add = $('<input type="radio" name="addStation" value="1"/>')
-    var $cancel = $('<input type="radio" name="addStation" value="0"/>')
+    var $add = $('<input type="radio" name="fillData"/>')
+    var $cancel = $('<input type="radio" name="cancel"/>')
     var $anchor = $('<i class="add-station anchor"></i>')
     var opened = false
+    var point
 
     component.mount = function () {
       $('body').append($overlay, $dialog)
     }
     component.open = function (opt) {
+      var point = opt.containerPoint
       if (opened) return
       component.close()
-      var latLng = opt.latLng
-      var layerPoint = opt.layerPoint
-      var containerPoint = opt.containerPoint
       $add.click(function (e) {
         e.preventDefault()
-        component.close()
+        component.fillData()
       })
       $cancel.click(function (e) {
         e.preventDefault()
@@ -42,7 +41,7 @@
           $('<label>否</label>').prepend($cancel)
           )
       )
-      component.center(containerPoint.x, containerPoint.y)
+      component.pointTo(point.x, point.y)
       $dialog.show()
       opened = true
     }
@@ -52,7 +51,7 @@
       $dialog.hide()
       opened = false
     }
-    component.center = function (x, y) {
+    component.pointTo = function (x, y) {
       var leftRightThreshhold = Math.floor($(window).width() / 2)
       var topBottomThreshold = Math.max($dialog.outerHeight() + 50, ($(window).height() / 3))
       var direction = (y < topBottomThreshold ? 'b' : 't') + (x < leftRightThreshhold ? 'r' : 'l')
@@ -62,9 +61,10 @@
         left: (direction[1] === 'r' ? x : x - $dialog.outerWidth())
       })
     }
-    component.submit = function () {
-    }
     component.fillData = function () {
+      $dialog.close()
+    }
+    component.submit = function () {
     }
     return component
   }
