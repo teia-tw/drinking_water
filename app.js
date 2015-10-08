@@ -33,11 +33,11 @@
       $dialog.append(
         $('<div class="add-station content">加一個飲水地點嗎？</div>')
         .append(
-          $('<label>是</label>').append($add),
-          $('<label>否</label>').append($cancel)
+          $('<label>是</label>').prepend($add),
+          $('<label>否</label>').prepend($cancel)
           )
       )
-      component.center(layerPoint.x, layerPoint.y)
+      component.center(containerPoint.x, containerPoint.y)
     }
     component.close = function () {
       $dialog.children().remove()
