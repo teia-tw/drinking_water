@@ -63,3 +63,27 @@ html, body, #map { height: 100%; }
   background: #fff;
   padding: 20px;
 }
+
+.add-station .arrow {
+  position: absolute;
+}
+.add-station.tl .arrow {
+  bottom: -8px;
+  right: -6px;
+  transform: rotate(0.375turn);
+}
+.add-station.tr .arrow {
+  bottom: -8px;
+  left: -6px;
+  transform: rotate(0.625turn);
+}
+.add-station.bl .arrow {
+  top: -8px;
+  right: -6px;
+  transform: rotate(0.125turn);
+}
+.add-station.br .arrow {
+  top: -8px;
+  left: -6px;
+  transform: rotate(-0.125turn);
+}
