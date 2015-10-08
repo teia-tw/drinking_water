@@ -5,7 +5,7 @@ html, body, #map { height: 100%; }
   font-size: 1.2em;
   line-height: 2.1;
 }
-#overlay {
+.modal.overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -15,19 +15,19 @@ html, body, #map { height: 100%; }
   background: #000;
   filter: alpha(opacity=50);
 }
-#modal {
+.modal.container {
   position: absolute;
   background: url(tint20.png) 0 0 repeat;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 14px;
   padding: 8px;
 }
-#content {
+.modal.content {
   border-radius: 8px;
   background: #fff;
   padding: 20px;
 }
-#close {
+.modal.close {
   position:absolute;
   background:url(close.png) 0 0 no-repeat;
   width:24px;
