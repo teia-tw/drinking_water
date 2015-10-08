@@ -5,10 +5,67 @@
 
   var map = new L.Map('map')
 
+  function stationDialog (map, s) {
+    var settings = s || {}
+    var component = {}
+    var $dialog = $('<div class="add-station dialog"></div>')
+    var $overlay = $('<div class="add-station dialog overlay"></div>')
+    var $add = $('<input type="radio" name="addStation" value="1"/>')
+    var $cancel = $('<input type="radio" name="addStation" value="0"/>')
+
+    component.mount = function () {
+      $('body').append($overlay, $dialog)
+    }
+    component.open = function (opt) {
+      component.close()
+      var latLng = opt.latLng
+      var layerPoint = opt.layerPoint
+      var containerPoint = opt.containerPoint
+      $add.click(function (e) {
+        e.preventDefault()
+        component.close()
+      })
+      $cancel.click(function (e) {
+        e.preventDefault()
+        component.close()
+      })
+
+      $dialog.append(
+        $('<div class="add-station content">加一個飲水地點嗎？</div>')
+        .append(
+          $('<label>是</label>').append($add),
+          $('<label>否</label>').append($cancel)
+          )
+      )
+      component.center(layerPoint.x, layerPoint.y)
+    }
+    component.close = function () {
+      $dialog.children().remove()
+    }
+    component.center = function (x, y) {
+      var top, left
+      top = Math.max($(window).height() - $dialog.outerHeight(), 0) / 2
+      left = Math.max($(window).width() - $dialog.outerWidth(), 0) / 2
+      $dialog.css({
+        //top: top + $(window).scrollTop(),
+        //left: left + $(window).scrollLeft()
+        top: y,
+        left: x
+      })
+    }
+    component.submit = function () {
+    }
+    component.fillData = function () {
+    }
+    return component
+  }
+  var dialog = stationDialog(map)
+
   function userLocator (map, s) {
     var settings = s || {
       setView: true,
-      maxZoom: 17
+      maxZoom: 17,
+      tap: true
     }
     var component = {}
     var button
@@ -33,6 +90,9 @@
       if (circle !== undefined) {
         circle.setRadius(0)
       }
+    })
+    map.on('contextmenu', function (evt) {
+      dialog.open(evt)
     })
 
     component.button = function () {
@@ -250,10 +310,11 @@
       }
     })
 
-  function onReady () {
+  function appStart () {
     about.mount()
+    dialog.mount()
     map
       .setView(new L.LatLng(25.0003133, 121.5388148), 15)
   }
-  $(document).ready(onReady)
+  $(document).ready(appStart)
 })($, L)

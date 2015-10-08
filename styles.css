@@ -47,3 +47,19 @@ html, body, #map { height: 100%; }
   bottom: 25px;
   right: 40px;
 }
+
+/* add station dialog */
+
+.add-station.dialog {
+  position: absolute;
+  background: url(tint20.png) 0 0 repeat;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 14px;
+  padding: 8px;
+}
+
+.add-station.content {
+  border-radius: 8px;
+  background: #fff;
+  padding: 20px;
+}
