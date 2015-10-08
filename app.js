@@ -13,11 +13,13 @@
     var $add = $('<input type="radio" name="addStation" value="1"/>')
     var $cancel = $('<input type="radio" name="addStation" value="0"/>')
     var $arrow = $('<i class="fa fa-caret-up add-station arrow"></i>')
+    var opened = false
 
     component.mount = function () {
       $('body').append($overlay, $dialog)
     }
     component.open = function (opt) {
+      if (opened) return
       component.close()
       var latLng = opt.latLng
       var layerPoint = opt.layerPoint
@@ -42,11 +44,13 @@
       )
       component.center(containerPoint.x, containerPoint.y)
       $dialog.show()
+      opened = true
     }
     component.close = function () {
       $dialog.children().remove()
       $dialog.removeClass('tl tr bl br')
       $dialog.hide()
+      opened = false
     }
     component.center = function (x, y) {
       var leftRightThreshhold = Math.floor($(window).width() / 2)
