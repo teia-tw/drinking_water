@@ -12,7 +12,7 @@
     var $overlay = $('<div class="add-station dialog overlay"></div>')
     var $add = $('<input type="radio" name="addStation" value="1"/>')
     var $cancel = $('<input type="radio" name="addStation" value="0"/>')
-    var $arrow = $('<i class="fa fa-caret-up add-station arrow"></i>')
+    var $anchor = $('<i class="add-station anchor"></i>')
     var opened = false
 
     component.mount = function () {
@@ -34,7 +34,7 @@
       })
 
       $dialog.append(
-        $arrow,
+        $anchor,
         $('<div class="add-station content">加一個飲水地點？</div>')
         .append(
           '<br>',

@@ -64,26 +64,25 @@ html, body, #map { height: 100%; }
   padding: 20px;
 }
 
-.add-station .arrow {
+.add-station .anchor {
   position: absolute;
+  background-image: url("waterdropred.png");
+  height: 40px;
+  width: 29px;
 }
-.add-station.tl .arrow {
-  bottom: -8px;
-  right: -6px;
-  transform: rotate(0.375turn);
+.add-station.tl .anchor {
+  bottom: 0px;
+  right: -15px;
 }
-.add-station.tr .arrow {
-  bottom: -8px;
-  left: -6px;
-  transform: rotate(0.625turn);
+.add-station.tr .anchor {
+  bottom: 0px;
+  left: -15px;
 }
-.add-station.bl .arrow {
-  top: -8px;
-  right: -6px;
-  transform: rotate(0.125turn);
+.add-station.bl .anchor {
+  top: -40px;
+  right: -15px;
 }
-.add-station.br .arrow {
-  top: -8px;
-  left: -6px;
-  transform: rotate(-0.125turn);
+.add-station.br .anchor {
+  top: -40px;
+  left: -15px;
 }
