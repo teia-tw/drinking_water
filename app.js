@@ -31,26 +31,29 @@
       })
 
       $dialog.append(
-        $('<div class="add-station content">加一個飲水地點嗎？</div>')
+        $('<div class="add-station content">加一個飲水地點？</div>')
         .append(
+          '<br>',
           $('<label>是</label>').prepend($add),
           $('<label>否</label>').prepend($cancel)
           )
       )
       component.center(containerPoint.x, containerPoint.y)
+      $dialog.show()
     }
     component.close = function () {
       $dialog.children().remove()
+      $dialog.removeClass('tl tr bl br')
+      $dialog.hide()
     }
     component.center = function (x, y) {
-      var top, left
-      top = Math.max($(window).height() - $dialog.outerHeight(), 0) / 2
-      left = Math.max($(window).width() - $dialog.outerWidth(), 0) / 2
+      var leftRightThreshhold = Math.floor($(window).width() / 2)
+      var topBottomThreshold = Math.max($dialog.outerHeight() + 50, ($(window).height() / 3))
+      var direction = (y < topBottomThreshold ? 'b' : 't') + (x < leftRightThreshhold ? 'r' : 'l')
+      $dialog.addClass(direction)
       $dialog.css({
-        //top: top + $(window).scrollTop(),
-        //left: left + $(window).scrollLeft()
-        top: y,
-        left: x
+        top: (direction[0] === 'b' ? y : y - $dialog.outerHeight()),
+        left: (direction[1] === 'r' ? x : x - $dialog.outerWidth())
       })
     }
     component.submit = function () {
