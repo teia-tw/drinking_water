@@ -5,6 +5,9 @@ html, body, #map { height: 100%; }
   font-size: 1.2em;
   line-height: 2.1;
 }
+
+/** modal */
+
 .modal.overlay {
   position: fixed;
   top: 0;
@@ -37,11 +40,9 @@ html, body, #map { height: 100%; }
   top:-7px;
   right:-7px;
 }
-#locator {
-  position: absolute;
-  bottom: 70px;
-  right: 40px;
-}
+
+/** about modal */
+
 #showNextTime {
   position: absolute;
   bottom: 25px;

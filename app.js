@@ -75,6 +75,7 @@
     var $submit = $('<input type="radio" name="submit"/>')
     var $cancel = $('<input type="radio" name="cancel"/>')
     var $anchor = $('<i class="add-station anchor"></i>')
+    var $fieldName = $('<div class="field"><label>飲水點名稱</label><input name="name" placeholder="名稱" type="text"></div>')
     var opened = false
     var point
 
@@ -133,7 +134,8 @@
         e.preventDefault()
         modal.close()
       })
-      var $content = $('<div>（填寫飲水點資料）</div>')
+      var $content = $('<div class="app add-station container"><form class="ui form"></form></div>')
+      $content.append($fieldName)
       $content.append($submit, $cancel)
       modal.open($content)
     }
@@ -223,7 +225,7 @@
       '<p><a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">一起編輯飲水地圖</a></p>' +
       '<p><a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a></p></div>')
     var $showNextTime = $('<label id="showNextTime"><input type="checkbox"></input>下次顯示這個訊息</label>')
-    var $locator = $('<a id="locator" href="#">顯示我的位置</a>')
+    var $locator = $('<button class="ui locator primary labeled icon button"><i class="map icon"></i>顯示我的位置</button>')
 
     component.open = function () {
       $content.append($locator, $showNextTime)
