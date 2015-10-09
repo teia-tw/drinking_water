@@ -112,16 +112,16 @@
     var $cancel = $('<button class="ui button">取消</button>')
     var $submit = $('<button class="ui submit primary button">送出</button>')
     var $anchor = $('<i class="add-station anchor"></i>')
-    var $fieldDescription = $('<div class="field"><label>飲水點說明</label><input name="name" placeholder="位置、負責單位、如何找到它⋯⋯" type="text"></div>')
+    var $fieldDescription = $('<div class="field"><label>飲水點說明</label><input name="description" placeholder="位置、負責單位、如何找到它⋯⋯" type="text"></div>')
     var $fieldTemperature = $('<div class="inline fields"><label>水溫</label>' +
-      '<div class="field"><div class="ui checkbox"><input name="iced_water" type="checkbox"><label>冰</label></div></div>' +
-      '<div class="field"><div class="ui checkbox"><input name="cold_water" type="checkbox"><label>冷</label></div></div>' +
-      '<div class="field"><div class="ui checkbox"><input name="warm_water" type="checkbox"><label>溫</label></div></div>' +
-      '<div class="field"><div class="ui checkbox"><input name="hot_water"  type="checkbox"><label>熱</label></div></div>' +
+      '<div class="field"><div class="ui checkbox"><input name="iced" value="iced" type="checkbox"><label>冰</label></div></div>' +
+      '<div class="field"><div class="ui checkbox"><input name="cold" value="cold" type="checkbox"><label>冷</label></div></div>' +
+      '<div class="field"><div class="ui checkbox"><input name="warm" value="warm" type="checkbox"><label>溫</label></div></div>' +
+      '<div class="field"><div class="ui checkbox"><input name="hot"  value="hot"  type="checkbox"><label>熱</label></div></div>' +
       '</div>')
     var $fieldOutdoors = $('<div class="inline fields"><label>位置</label>' +
-      '<div class="field"><div class="ui radio checkbox"><input name="indoors" type="radio" value="yes" checked="checked"><label>室內</label></div></div>' +
-      '<div class="field"><div class="ui radio checkbox"><input name="indoors" type="radio" value=""                     ><label>室外</label></div></div>' +
+      '<div class="field"><div class="ui radio checkbox"><input name="indoors" type="radio" value="indoors" checked="checked"><label>室內</label></div></div>' +
+      '<div class="field"><div class="ui radio checkbox"><input name="indoors" type="radio" value="outdoors"                 ><label>室外</label></div></div>' +
       '</div>')
     var $fieldLevel = $('<div class="inline fields"><label>樓層</label>' +
       '<div class="field"><select class="ui search selection dropdown"><option value="-5">B5</option><option value="-4">B4</option><option value="-3">B3</option><option value="-2">B2</option><option value="-1">B1</option><option value="1" selected="selected">1F</option><option value="2">2F</option><option value="3">3F</option><option value="4">4F</option><option value="5">5F</option></select></div>' +
@@ -192,9 +192,32 @@
     component.submit = function () {
       modal.close()
       loading.open()
-      setTimeout(function () {
+      var latLng = map.containerPointToLatLng(point)
+      var noteText = '#飲水地圖\n' +
+        '說明：' + $fieldDescription.children('input')[0].value + '\n' +
+        '溫度：' + $fieldTemperature.find('input').map(function () {
+          return $(this).prop('checked') ? $(this).val() : null
+        }).toArray().join(' ') + '\n' +
+        '位置：' + $fieldOutdoors.find('input').map(function () {
+          return $(this).prop('checked') ? $(this).val() : null
+        }).toArray().join(' ') + '\n' +
+        '樓層：' + $fieldLevel.find('option').map(function () {
+          return $(this).prop('selected') ? $(this).val() : null
+        }).toArray().join(' ') + '\n' +
+        '精確：' + $fieldPrecise.find('input').map(function () {
+          return $(this).prop('checked') ? 'yes' : 'no'
+        }).toArray().join(' ')
+      $.post('http://api.openstreetmap.org/api/0.6/notes.json?lat=' + latLng.lat + '&lon=' + latLng.lng + '&text=' + encodeURIComponent(noteText), '', function (data, ok, ajax) {
         loading.close()
-      }, 3000)
+        console.log(data)
+        var $content = $('<form class="app add-station ui form"><h4>資料已上傳至開放街圖</h4><p><a href="https://www.openstreetmap.org/#map=18/' + data.geometry.coordinates[1] + '/' + data.geometry.coordinates[0] + '" target="_blank">開放街圖</a>是自由而且開源的全球地圖，由像你一樣的使用者所繪製。如果你願意協助編輯<a href="https://www.openstreetmap.org/note/' + data.properties.id + '" target="_blank">剛才新增的飲水點資料</a>，可參考開放街圖社群所提供的 <a href="https://osmtw.hackpad.com/Note-5FCtyE3QsJE" target="_blank">Note 編修說明書</a>。</p></form>')
+        var $ok = $('<button class="ui primary button">好</button>')
+        $ok.click(function () {
+          modal.close()
+        })
+        $content.append($ok)
+        modal.open($content)
+      })
     }
     return component
   })(map, modal, loading)
