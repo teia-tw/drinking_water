@@ -4,12 +4,75 @@
   }
 
   var map = new L.Map('map')
+  var modal = (function (s) {
+    var settings = s || {}
+    var component = {}
+    var $overlay = $('<div class="modal overlay"></div>')
+    var $modal = $('<div class="modal container"></div>')
+    var $content = $('<div class="modal content"></div>')
+    var $close = $('<a class="modal close" href="#">close</a>')
 
-  function stationDialog (map) {
+    $modal.hide()
+    $overlay.hide()
+    $modal.append($close, $content)
+
+    component.mount = function () {
+      $('body').append($overlay, $modal)
+    }
+
+    component.center = function () {
+      var top, left
+      top = Math.max($(window).height() - $modal.outerHeight(), 0) / 2
+      left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2
+      $modal.css({
+        top: top + $(window).scrollTop(),
+        left: left + $(window).scrollLeft()
+      })
+    }
+
+    component.open = function (content) {
+      $('.leaflet-control').css('display', 'none')
+      $modal.css({
+        width: settings.width || 'auto',
+        height: settings.height || 'auto'
+      })
+      console.log(content)
+      $content.append(content)
+      component.center()
+      $(window).bind('resize.modal', component.center)
+      $modal.show()
+      $overlay.show()
+    }
+
+    component.close = function () {
+      $('.leaflet-control').css('display', 'inherit')
+      $modal.hide()
+      $overlay.hide()
+      $(window).unbind('resize.modal')
+      $content.children().remove()
+    }
+
+    $overlay.click(function (e) {
+      e.preventDefault()
+      component.close()
+    })
+
+    $close.click(function (e) {
+      e.preventDefault()
+      component.close()
+    })
+
+    return component
+  })({
+    width: screenSize() === 'large' ? $(window).width() / 1.5 : $(window).width() / 1.1
+  })
+
+  var addStation = (function (map, modal) {
     var component = {}
     var $dialog = $('<div class="add-station dialog"></div>')
     var $overlay = $('<div class="add-station dialog overlay"></div>')
     var $add = $('<input type="radio" name="fillData"/>')
+    var $submit = $('<input type="radio" name="submit"/>')
     var $cancel = $('<input type="radio" name="cancel"/>')
     var $anchor = $('<i class="add-station anchor"></i>')
     var opened = false
@@ -61,13 +124,24 @@
       })
     }
     component.fillData = function () {
-      $dialog.close()
+      component.close()
+      $submit.click(function (e) {
+        e.preventDefault()
+        component.submit()
+      })
+      $cancel.click(function (e) {
+        e.preventDefault()
+        modal.close()
+      })
+      var $content = $('<div>（填寫飲水點資料）</div>')
+      $content.append($submit, $cancel)
+      modal.open($content)
     }
     component.submit = function () {
+      modal.close()
     }
     return component
-  }
-  var dialog = stationDialog(map)
+  })(map, modal)
 
   function userLocator (map, s) {
     var settings = s || {
@@ -80,7 +154,6 @@
     var circle
 
     function onLocationFound (e) {
-      console.log(e)
       if (circle === undefined) {
         circle = L.circle(e.latlng, 200).addTo(map)
       } else {
@@ -100,7 +173,7 @@
       }
     })
     map.on('contextmenu', function (evt) {
-      dialog.open(evt)
+      addStation.open(evt)
     })
 
     component.button = function () {
@@ -139,69 +212,6 @@
     return component
   }
   var locator = userLocator(map)
-
-  function modalProvider (s) {
-    var settings = s || {}
-    var component = {}
-    var $overlay = $('<div class="modal overlay"></div>')
-    var $modal = $('<div class="modal container"></div>')
-    var $content = $('<div class="modal content"></div>')
-    var $close = $('<a class="modal close" href="#">close</a>')
-
-    $modal.hide()
-    $overlay.hide()
-    $modal.append($close, $content)
-
-    component.mount = function () {
-      $('body').append($overlay, $modal)
-    }
-
-    component.center = function () {
-      var top, left
-      top = Math.max($(window).height() - $modal.outerHeight(), 0) / 2
-      left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2
-      $modal.css({
-        top: top + $(window).scrollTop(),
-        left: left + $(window).scrollLeft()
-      })
-    }
-
-    component.open = function (content) {
-      $('.leaflet-control').css('display', 'none')
-      $modal.css({
-        width: settings.width || 'auto',
-        height: settings.height || 'auto'
-      })
-      $content.append(content)
-      component.center()
-      $(window).bind('resize.modal', component.center)
-      $modal.show()
-      $overlay.show()
-    }
-
-    component.close = function () {
-      $('.leaflet-control').css('display', 'inherit')
-      $modal.hide()
-      $overlay.hide()
-      $(window).unbind('resize.modal')
-      $content.children().remove()
-    }
-
-    $overlay.click(function (e) {
-      e.preventDefault()
-      component.close()
-    })
-
-    $close.click(function (e) {
-      e.preventDefault()
-      component.close()
-    })
-
-    return component
-  }
-  var modal = modalProvider({
-    width: screenSize() === 'large' ? $(window).width() / 1.5 : $(window).width() / 1.1
-  })
 
   var about = (function (locator, modal) {
     var component = {}
@@ -337,7 +347,7 @@
 
   function appStart () {
     modal.mount()
-    dialog.mount()
+    addStation.mount()
     map
       .setView(new L.LatLng(25.0003133, 121.5388148), 15)
   }
