@@ -6,6 +6,27 @@ html, body, #map { height: 100%; }
   line-height: 2.1;
 }
 
+/** loading */
+
+.app.loading.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  background: #000;
+  filter: alpha(opacity=50);
+}
+
+.app.loading.container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+
 /** modal */
 
 .app.modal.overlay {
@@ -18,6 +39,7 @@ html, body, #map { height: 100%; }
   background: #000;
   filter: alpha(opacity=50);
 }
+
 .app.modal.container {
   position: absolute;
   background: url(tint20.png) 0 0 repeat;

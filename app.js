@@ -4,7 +4,47 @@
   }
 
   var map = new L.Map('map')
-  var modal = (function (s) {
+
+  var mapControl = (function () {
+    var component = {}
+    component.show = function () {
+      $('.leaflet-control').css('display', 'inherit')
+    }
+    component.hide = function () {
+      $('.leaflet-control').css('display', 'none')
+    }
+    return component
+  })()
+
+  var loading = (function (mapControl, s) {
+    var settings = s || { image: 'reload.svg' }
+    var component = {}
+    var $overlay = $('<div class="app loading overlay"></div>')
+    var $loading = $('<div class="app loading container"><img src="' + settings.image + '"></div>')
+
+    component.mount = function () {
+      component.close()
+      $('body').append($overlay, $loading)
+    }
+
+    component.open = function () {
+      mapControl.hide()
+      $overlay.show()
+      $loading.show()
+    }
+
+    component.close = function () {
+      mapControl.show()
+      $overlay.hide()
+      $loading.hide()
+    }
+
+    return component
+  })(mapControl, {
+    image: 'reload.svg'
+  })
+
+  var modal = (function (mapControl, s) {
     var settings = s || {}
     var component = {}
     var $overlay = $('<div class="app modal overlay"></div>')
@@ -12,11 +52,9 @@
     var $content = $('<div class="app modal content"></div>')
     var $close = $('<a class="app modal close" href="#">close</a>')
 
-    $modal.hide()
-    $overlay.hide()
-    $modal.append($close, $content)
-
     component.mount = function () {
+      component.close()
+      $modal.append($close, $content)
       $('body').append($overlay, $modal)
     }
 
@@ -31,12 +69,11 @@
     }
 
     component.open = function (content) {
-      $('.leaflet-control').css('display', 'none')
+      mapControl.hide()
       $modal.css({
         width: settings.width || 'auto',
         height: settings.height || 'auto'
       })
-      console.log(content)
       $content.append(content)
       component.center()
       $(window).bind('resize.modal', component.center)
@@ -45,7 +82,7 @@
     }
 
     component.close = function () {
-      $('.leaflet-control').css('display', 'inherit')
+      mapControl.show()
       $modal.hide()
       $overlay.hide()
       $(window).unbind('resize.modal')
@@ -63,11 +100,11 @@
     })
 
     return component
-  })({
+  })(mapControl, {
     width: screenSize() === 'large' ? $(window).width() / 1.5 : $(window).width() / 1.1
   })
 
-  var addStation = (function (map, modal) {
+  var addStation = (function (map, modal, loading) {
     var component = {}
     var $dialog = $('<div class="app add-station dialog"></div>')
     var $overlay = $('<div class="app add-station dialog overlay"></div>')
@@ -154,9 +191,13 @@
     }
     component.submit = function () {
       modal.close()
+      loading.open()
+      setTimeout(function () {
+        loading.close()
+      }, 3000)
     }
     return component
-  })(map, modal)
+  })(map, modal, loading)
 
   function userLocator (map, s) {
     var settings = s || {
@@ -360,6 +401,7 @@
     })
 
   function appStart () {
+    loading.mount()
     modal.mount()
     addStation.mount()
     map
