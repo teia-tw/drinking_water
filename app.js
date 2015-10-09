@@ -193,7 +193,7 @@
       modal.close()
       loading.open()
       var latLng = map.containerPointToLatLng(point)
-      var noteText = '#飲水地圖\n' +
+      var noteText = '#飲水地圖 drinking_water\n' +
         '說明：' + $fieldDescription.children('input')[0].value + '\n' +
         '溫度：' + $fieldTemperature.find('input').map(function () {
           return $(this).prop('checked') ? $(this).val() : null
