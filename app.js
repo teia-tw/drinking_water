@@ -72,10 +72,24 @@
     var $dialog = $('<div class="app add-station dialog"></div>')
     var $overlay = $('<div class="app add-station dialog overlay"></div>')
     var $add = $('<button class="ui primary button">加</button>')
-    var $cancel = $('<button class="ui button">不加</button>')
-    var $submit = $('<input type="radio" name="submit"/>')
+    var $cancel = $('<button class="ui button">取消</button>')
+    var $submit = $('<button class="ui submit primary button">送出</button>')
     var $anchor = $('<i class="add-station anchor"></i>')
-    var $fieldName = $('<div class="field"><label>飲水點名稱</label><input name="name" placeholder="名稱" type="text"></div>')
+    var $fieldDescription = $('<div class="field"><label>飲水點說明</label><input name="name" placeholder="位置、負責單位、如何找到它⋯⋯" type="text"></div>')
+    var $fieldTemperature = $('<div class="inline fields"><label>水溫</label>' +
+      '<div class="field"><div class="ui checkbox"><input name="iced_water" type="checkbox"><label>冰</label></div></div>' +
+      '<div class="field"><div class="ui checkbox"><input name="cold_water" type="checkbox"><label>冷</label></div></div>' +
+      '<div class="field"><div class="ui checkbox"><input name="warm_water" type="checkbox"><label>溫</label></div></div>' +
+      '<div class="field"><div class="ui checkbox"><input name="hot_water"  type="checkbox"><label>熱</label></div></div>' +
+      '</div>')
+    var $fieldOutdoors = $('<div class="inline fields"><label>位置</label>' +
+      '<div class="field"><div class="ui radio checkbox"><input name="indoors" type="radio" value="yes" checked="checked"><label>室內</label></div></div>' +
+      '<div class="field"><div class="ui radio checkbox"><input name="indoors" type="radio" value=""                     ><label>室外</label></div></div>' +
+      '</div>')
+    var $fieldLevel = $('<div class="inline fields"><label>樓層</label>' +
+      '<div class="field"><select class="ui search selection dropdown"><option value="-5">B5</option><option value="-4">B4</option><option value="-3">B3</option><option value="-2">B2</option><option value="-1">B1</option><option value="1" selected="selected">1F</option><option value="2">2F</option><option value="3">3F</option><option value="4">4F</option><option value="5">5F</option></select></div>' +
+      '</div>')
+    var $fieldPrecise = $('<div class="field"><div class="ui slider checkbox"><input name="precise" type="checkbox"><label>這個資訊是準確的</label></div></div>')
     var opened = false
     var point
 
@@ -131,8 +145,10 @@
         e.preventDefault()
         modal.close()
       })
-      var $content = $('<div class="app add-station container"><form class="ui form"></form></div>')
-      $content.append($fieldName)
+      var $content = $('<form class="app add-station ui form"></form>')
+      $content.append(
+        $fieldDescription, $fieldTemperature, $fieldOutdoors, $fieldLevel,
+        $fieldPrecise)
       $content.append($submit, $cancel)
       modal.open($content)
     }
