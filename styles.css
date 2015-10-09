@@ -8,7 +8,7 @@ html, body, #map { height: 100%; }
 
 /** modal */
 
-.modal.overlay {
+.app.modal.overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -18,19 +18,19 @@ html, body, #map { height: 100%; }
   background: #000;
   filter: alpha(opacity=50);
 }
-.modal.container {
+.app.modal.container {
   position: absolute;
   background: url(tint20.png) 0 0 repeat;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 14px;
   padding: 8px;
 }
-.modal.content {
+.app.modal.content {
   border-radius: 8px;
   background: #fff;
   padding: 20px;
 }
-.modal.close {
+.app.modal.close {
   position:absolute;
   background:url(close.png) 0 0 no-repeat;
   width:24px;
@@ -43,15 +43,13 @@ html, body, #map { height: 100%; }
 
 /** about modal */
 
-#showNextTime {
-  position: absolute;
-  bottom: 25px;
-  right: 40px;
+.showNextTime {
+  float: right;
 }
 
 /* add station dialog */
 
-.add-station.dialog {
+.app.add-station.dialog {
   position: absolute;
   background: url(tint20.png) 0 0 repeat;
   background: rgba(0, 0, 0, 0.2);

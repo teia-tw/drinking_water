@@ -7,10 +7,10 @@
   var modal = (function (s) {
     var settings = s || {}
     var component = {}
-    var $overlay = $('<div class="modal overlay"></div>')
-    var $modal = $('<div class="modal container"></div>')
-    var $content = $('<div class="modal content"></div>')
-    var $close = $('<a class="modal close" href="#">close</a>')
+    var $overlay = $('<div class="app modal overlay"></div>')
+    var $modal = $('<div class="app modal container"></div>')
+    var $content = $('<div class="app modal content"></div>')
+    var $close = $('<a class="app modal close" href="#">close</a>')
 
     $modal.hide()
     $overlay.hide()
@@ -69,11 +69,11 @@
 
   var addStation = (function (map, modal) {
     var component = {}
-    var $dialog = $('<div class="add-station dialog"></div>')
-    var $overlay = $('<div class="add-station dialog overlay"></div>')
-    var $add = $('<input type="radio" name="fillData"/>')
+    var $dialog = $('<div class="app add-station dialog"></div>')
+    var $overlay = $('<div class="app add-station dialog overlay"></div>')
+    var $add = $('<button class="ui primary button">加</button>')
+    var $cancel = $('<button class="ui button">不加</button>')
     var $submit = $('<input type="radio" name="submit"/>')
-    var $cancel = $('<input type="radio" name="cancel"/>')
     var $anchor = $('<i class="add-station anchor"></i>')
     var $fieldName = $('<div class="field"><label>飲水點名稱</label><input name="name" placeholder="名稱" type="text"></div>')
     var opened = false
@@ -97,12 +97,8 @@
 
       $dialog.append(
         $anchor,
-        $('<div class="add-station content">加一個飲水地點？</div>')
-        .append(
-          '<br>',
-          $('<label>是</label>').prepend($add),
-          $('<label>否</label>').prepend($cancel)
-          )
+        $('<div class="add-station content ui form"><h4>加一個飲水點？</h4><p>飲水點資料，將經過開放街圖社群的回饋而加入資料庫中。請儘量提供完整訊息，以協助社群驗證資料正確性。</p></div>')
+        .append($add, $cancel)
       )
       component.pointTo(point.x, point.y)
       $dialog.show()
@@ -121,7 +117,8 @@
       $dialog.addClass(direction)
       $dialog.css({
         top: (direction[0] === 'b' ? y : y - $dialog.outerHeight()),
-        left: (direction[1] === 'r' ? x : x - $dialog.outerWidth())
+        left: (direction[1] === 'r' ? x : x - $dialog.outerWidth()),
+        maxWidth: 300
       })
     }
     component.fillData = function () {
@@ -224,14 +221,14 @@
       '<p><a href="http://beta.hackfoldr.org/drinking-water/" target="_blank">計劃網站</a></p>' +
       '<p><a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">一起編輯飲水地圖</a></p>' +
       '<p><a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a></p></div>')
-    var $showNextTime = $('<label id="showNextTime"><input type="checkbox"></input>下次顯示這個訊息</label>')
+    var $showNextTime = $('<div class="ui showNextTime checkbox"><input name="showNextTime" type="checkbox"><label>下次顯示這個訊息</label></div>')
     var $locator = $('<button class="ui locator primary labeled icon button"><i class="map icon"></i>顯示我的位置</button>')
 
     component.open = function () {
       $content.append($locator, $showNextTime)
-      $showNextTime.children()[0].checked = component.showNextTime()
+      $showNextTime.children('input[type="checkbox"]')[0].checked = component.willShowNextTime()
       $showNextTime.click(function (e) {
-        window.localStorage.showNextTime = $(this).children()[0].checked
+        window.localStorage.showNextTime = $(this).children('input[type="checkbox"]')[0].checked
       })
       $locator.click(function (e) {
         e.preventDefault()
@@ -252,7 +249,7 @@
       }
     }
 
-    component.showNextTime = function () {
+    component.willShowNextTime = function () {
       return window.localStorage.showNextTime === undefined || window.localStorage.showNextTime === 'true'
     }
 
@@ -339,10 +336,9 @@
       }
     })())
     .on('load', function () {
-      if (about.showNextTime()) {
+      if (about.willShowNextTime()) {
         about.open()
-      }
-      if (!about.showNextTime()) {
+      } else {
         locator.start()
       }
     })
