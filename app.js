@@ -5,8 +5,7 @@
 
   var map = new L.Map('map')
 
-  function stationDialog (map, s) {
-    var settings = s || {}
+  function stationDialog (map) {
     var component = {}
     var $dialog = $('<div class="add-station dialog"></div>')
     var $overlay = $('<div class="add-station dialog overlay"></div>')
@@ -20,7 +19,7 @@
       $('body').append($overlay, $dialog)
     }
     component.open = function (opt) {
-      var point = opt.containerPoint
+      point = opt.containerPoint
       if (opened) return
       component.close()
       $add.click(function (e) {
@@ -204,90 +203,32 @@
     width: screenSize() === 'large' ? $(window).width() / 1.5 : $(window).width() / 1.1
   })
 
-  function aboutModal (locator, s) {
-    var settings = s || {}
+  var about = (function (locator, modal) {
     var component = {}
-
-    var content = '<p>一個600ml的瓶裝水，需要耗費600ml的6~7倍水量製造它的塑膠瓶！在缺水的時代來臨時，別再讓塑膠瓶跟我們搶水資源了！</p>'
-      + '<p>自備環保杯是個絕佳的選擇，但是喝完自備的水後怎麼辦？</p>'
-      + '<p>從現在開始，我們要讓帶環保杯的朋友，可以快速的找到補水地點，讓大家隨心所欲的喝水保健康。</p>'
-      + '<p>此外，<a href="http://www.e-info.org.tw/" target="_blank">台灣環境資訊協會</a>懇請大家，少喝瓶裝水，努力減少塑膠瓶及瓶蓋等海洋垃圾，減少海鳥、海龜、鯨豚…等海洋生物吞食這些塑膠垃圾而痛苦至死。您的努力，也將是他們活命的機會！</p>'
-      + '<p><a href="http://beta.hackfoldr.org/drinking-water/" target="_blank">計劃網站</a></p>'
-      + '<p><a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">一起編輯飲水地圖</a></p>'
-      + '<p><a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a></p>'
-
-    var $overlay = $('<div class="modal overlay"></div>')
-    var $modal = $('<div class="modal container"></div>')
-    var $content = $('<div class="modal content"></div>')
-    var $close = $('<a class="modal close" href="#">close</a>')
+    var $content = $('<div><p>一個600ml的瓶裝水，需要耗費600ml的6~7倍水量製造它的塑膠瓶！在缺水的時代來臨時，別再讓塑膠瓶跟我們搶水資源了！</p>' +
+      '<p>自備環保杯是個絕佳的選擇，但是喝完自備的水後怎麼辦？</p>' +
+      '<p>從現在開始，我們要讓帶環保杯的朋友，可以快速的找到補水地點，讓大家隨心所欲的喝水保健康。</p>' +
+      '<p>此外，<a href="http://www.e-info.org.tw/" target="_blank">台灣環境資訊協會</a>懇請大家，少喝瓶裝水，努力減少塑膠瓶及瓶蓋等海洋垃圾，減少海鳥、海龜、鯨豚…等海洋生物吞食這些塑膠垃圾而痛苦至死。您的努力，也將是他們活命的機會！</p>' +
+      '<p><a href="http://beta.hackfoldr.org/drinking-water/" target="_blank">計劃網站</a></p>' +
+      '<p><a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">一起編輯飲水地圖</a></p>' +
+      '<p><a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a></p></div>')
     var $showNextTime = $('<label id="showNextTime"><input type="checkbox"></input>下次顯示這個訊息</label>')
     var $locator = $('<a id="locator" href="#">顯示我的位置</a>')
 
-    $modal.hide()
-    $overlay.hide()
-    $modal.append($close)
-
-    $content.append(content, $locator, $showNextTime)
-    $modal.prepend($content)
-
-    component.mount = function () {
-      $('body').append($overlay, $modal)
-    }
-
-    component.center = function () {
-      var top, left
-      top = Math.max($(window).height() - $modal.outerHeight(), 0) / 2
-      left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2
-      $modal.css({
-        top: top + $(window).scrollTop(),
-        left: left + $(window).scrollLeft()
-      })
-    }
-
     component.open = function () {
-      $('.leaflet-control').css('display', 'none')
-      $modal.css({
-        width: settings.width || 'auto',
-        height: settings.height || 'auto'
+      $content.append($locator, $showNextTime)
+      $showNextTime.children()[0].checked = component.showNextTime()
+      $showNextTime.click(function (e) {
+        window.localStorage.showNextTime = $(this).children()[0].checked
       })
-      component.center()
-      $(window).bind('resize.modal', component.center)
-      $modal.show()
-      $overlay.show()
+      $locator.click(function (e) {
+        e.preventDefault()
+        locator.start()
+        component.close()
+      })
+      modal.open($content)
     }
-
-    component.close = function () {
-      $('.leaflet-control').css('display', 'inherit')
-      $modal.hide()
-      $overlay.hide()
-      $(window).unbind('resize.modal')
-    }
-
-    $overlay.click(function (e) {
-      e.preventDefault()
-      component.close()
-    })
-
-    $close.click(function (e) {
-      e.preventDefault()
-      component.close()
-    })
-
-    $locator.click(function (e) {
-      e.preventDefault()
-      locator.start()
-      component.close()
-    })
-
-    $showNextTime.click(function (e) {
-      window.localStorage.showNextTime = $(this).children()[0].checked
-    })
-
-    component.showNextTime = function () {
-      return window.localStorage.showNextTime === undefined || window.localStorage.showNextTime === 'true'
-    }
-
-    $showNextTime.children()[0].checked = component.showNextTime()
+    component.close = modal.close
 
     component.mapButton = function (settings) {
       return function () {
@@ -299,11 +240,12 @@
       }
     }
 
+    component.showNextTime = function () {
+      return window.localStorage.showNextTime === undefined || window.localStorage.showNextTime === 'true'
+    }
+
     return component
-  }
-  var about = aboutModal(locator, {
-    width: screenSize() === 'large' ? $(window).width() / 1.5 : $(window).width() / 1.1
-  })
+  })(locator, modal)
 
   function osmLayer () {
     var attr_osm = '地圖資料 &copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
@@ -394,7 +336,6 @@
     })
 
   function appStart () {
-    about.mount()
     modal.mount()
     dialog.mount()
     map
