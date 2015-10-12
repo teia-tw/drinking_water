@@ -65,6 +65,11 @@ html, body, #map { height: 100%; }
 
 /** about modal */
 
+.intro.text {
+  overflow-y: scroll;
+  max-height: 80vh;
+}
+
 @media all and (min-width: 600px) {
   .showNextTime {
     float: right;
