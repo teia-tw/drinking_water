@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>飲水地圖 Note 列表</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.4/semantic.min.css"/>
+  </head>
+  <body>
+    <table class="notes ui celled padded table">
+      <thead>
+        <tr class="single line">
+          <th>狀態</th>
+          <th>ID</th>
+          <th>送交時間</th>
+          <th>說明</th>
+        </tr>
+      </thead>
+      <tbody class="content">
+      </tbody>
+    </table>
+    <script>
+      var notesURL = 'https://api.openstreetmap.org/api/0.6/notes/search.json?q=%E9%A3%B2%E6%B0%B4%E5%9C%B0%E5%9C%96'
+      var $table = $('.notes.table .content')
+      $.get(notesURL, '', function (data, ok, ajax) {
+        data.features.forEach(function (d) {
+          var $tr = $('<tr></tr>')
+          $tr.append(
+            '<td>' + '<div class="ui ' + (d.properties.status === 'open' ? 'red' : 'teal') + ' label">' + d.properties.status + '</div></td>',
+            '<td>' + '<a href="https://www.openstreetmap.org/note/' + d.properties.id + '">' + d.properties.id + '</a>' + '</td>',
+            '<td>' + d.properties.date_created + '</td>',
+            '<td>' + d.properties.comments[0].html + '</td>'
+          )
+          $tr.addClass(d.properties.status)
+          $tr.click(function (e) {
+            e.preventDefault()
+            window.open('https://www.openstreetmap.org/note/' + d.properties.id)
+          })
+          $table.append($tr)
+        })
+      })
+    </script>
+  </body>
+</html>
