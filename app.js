@@ -193,7 +193,7 @@
       modal.close()
       loading.open()
       var latLng = map.containerPointToLatLng(point)
-      var noteText = '#飲水地圖 drinking_water\n' +
+      var noteText = '#飲水地圖 #drinking_water\n' +
         '說明：' + $fieldDescription.children('input')[0].value + '\n' +
         '溫度：' + $fieldTemperature.find('input').map(function () {
           return $(this).prop('checked') ? $(this).val() : null
@@ -210,6 +210,7 @@
       $.post('http://api.openstreetmap.org/api/0.6/notes.json?lat=' + latLng.lat + '&lon=' + latLng.lng + '&text=' + encodeURIComponent(noteText), '', function (data, ok, ajax) {
         loading.close()
         console.log(data)
+      //'<p><a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">一起編輯飲水地圖</a></p>' +
         var $content = $('<form class="app add-station ui form"><h4>資料已上傳至開放街圖</h4><p><a href="https://www.openstreetmap.org/#map=18/' + data.geometry.coordinates[1] + '/' + data.geometry.coordinates[0] + '" target="_blank">開放街圖</a>是自由而且開源的全球地圖，由像你一樣的使用者所繪製。如果你願意協助編輯<a href="https://www.openstreetmap.org/note/' + data.properties.id + '" target="_blank">剛才新增的飲水點資料</a>，可參考開放街圖社群所提供的 <a href="https://osmtw.hackpad.com/Note-5FCtyE3QsJE" target="_blank">Note 編修說明書</a>。</p></form>')
         var $ok = $('<button class="ui primary button">好</button>')
         $ok.click(function () {
@@ -299,7 +300,6 @@
       '<p>從現在開始，我們要讓帶環保杯的朋友，可以快速的找到補水地點，讓大家隨心所欲的喝水保健康。</p>' +
       '<p>此外，<a href="http://www.e-info.org.tw/" target="_blank">台灣環境資訊協會</a>懇請大家，少喝瓶裝水，努力減少塑膠瓶及瓶蓋等海洋垃圾，減少海鳥、海龜、鯨豚…等海洋生物吞食這些塑膠垃圾而痛苦至死。您的努力，也將是他們活命的機會！</p>' +
       '<p><a href="http://beta.hackfoldr.org/drinking-water/" target="_blank">計劃網站</a></p>' +
-      '<p><a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">一起編輯飲水地圖</a></p>' +
       '<p><a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a></p></div>')
     var $showNextTime = $('<div class="ui showNextTime checkbox"><input name="showNextTime" type="checkbox"><label>下次顯示這個訊息</label></div>')
     var $locator = $('<button class="ui locator primary labeled icon button"><i class="map icon"></i>顯示我的位置</button>')

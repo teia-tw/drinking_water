@@ -65,8 +65,16 @@ html, body, #map { height: 100%; }
 
 /** about modal */
 
-.showNextTime {
-  float: right;
+@media all and (min-width: 600px) {
+  .showNextTime {
+    float: right;
+  }
+}
+@media all and (max-width: 599px) {
+  .showNextTime {
+    padding-top: 1em;
+    display: block !important;
+  }
 }
 
 /* add station dialog */
