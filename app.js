@@ -44,8 +44,11 @@
     image: 'reload.svg'
   })
 
-  var modal = (function (mapControl, s) {
-    var settings = s || {}
+  var modal = (function (mapControl, screenSize) {
+    var settings = {
+      width: screenSize() === 'large' ? $(window).width() / 1.5 : $(window).width() / 1.1,
+      height: screenSize() === 'large' ? 'auto' : $(window).height() / 1.1
+    }
     var component = {}
     var $overlay = $('<div class="app modal overlay"></div>')
     var $modal = $('<div class="app modal container"></div>')
@@ -89,6 +92,8 @@
       $content.children().remove()
     }
 
+    component.scroll = $content.scroll.bind($content)
+
     $overlay.click(function (e) {
       e.preventDefault()
       component.close()
@@ -100,9 +105,7 @@
     })
 
     return component
-  })(mapControl, {
-    width: screenSize() === 'large' ? $(window).width() / 1.5 : $(window).width() / 1.1
-  })
+  })(mapControl, screenSize)
 
   var addStation = (function (map, modal, loading) {
     var component = {}
@@ -295,20 +298,38 @@
 
   var about = (function (locator, modal) {
     var component = {}
-    var $content = $('<div class="intro text"><p>一個600ml的瓶裝水，需要耗費600ml的6~7倍水量製造它的塑膠瓶！在缺水的時代來臨時，別再讓塑膠瓶跟我們搶水資源了！</p>' +
+    var $content = $('<div class="app about text"><p>一個600ml的瓶裝水，需要耗費600ml的6~7倍水量製造它的塑膠瓶！在缺水的時代來臨時，別再讓塑膠瓶跟我們搶水資源了！</p>' +
       '<p>自備環保杯是個絕佳的選擇，但是喝完自備的水後怎麼辦？</p>' +
       '<p>從現在開始，我們要讓帶環保杯的朋友，可以快速的找到補水地點，讓大家隨心所欲的喝水保健康。</p>' +
       '<p>此外，<a href="http://www.e-info.org.tw/" target="_blank">台灣環境資訊協會</a>懇請大家，少喝瓶裝水，努力減少塑膠瓶及瓶蓋等海洋垃圾，減少海鳥、海龜、鯨豚…等海洋生物吞食這些塑膠垃圾而痛苦至死。您的努力，也將是他們活命的機會！</p>' +
       '<p><a href="http://beta.hackfoldr.org/drinking-water/" target="_blank">計劃網站</a></p>' +
       '<p><a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a></p></div>')
-    var $showNextTime = $('<div class="ui showNextTime checkbox"><input name="showNextTime" type="checkbox"><label>下次顯示這個訊息</label></div>')
-    var $locator = $('<button class="ui locator primary labeled icon button"><i class="map icon"></i>顯示我的位置</button>')
+    var $showNextTime = $('<div class="ui showNextTime checkbox"><input name="showNextTime" type="checkbox"><label>下次顯示</label></div>')
+    var $locator = $('<div class="ui locator primary labeled icon button"><i class="map icon"></i>顯示我的位置</div>')
+    var locatorShadow = {
+      position: 'absolute',
+      left: 8,
+      bottom: 8,
+      right: 4,
+      boxShadow: '0px -20px 10px -5px #fff'
+    }
 
     component.open = function () {
       $content.append($locator, $showNextTime)
       $showNextTime.children('input[type="checkbox"]')[0].checked = component.willShowNextTime()
       $showNextTime.click(function (e) {
         window.localStorage.showNextTime = $(this).children('input[type="checkbox"]')[0].checked
+      })
+      $locator.css(locatorShadow)
+      modal.scroll(function () {
+        if ($(this).scrollTop() === 0) {
+          $locator.css(locatorShadow)
+        } else {
+          $locator.css({
+            position: 'inherit',
+            boxShadow: 'none'
+          })
+        }
       })
       $locator.click(function (e) {
         e.preventDefault()

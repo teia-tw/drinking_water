@@ -51,6 +51,8 @@ html, body, #map { height: 100%; }
   border-radius: 8px;
   background: #fff;
   padding: 20px;
+  overflow-y: scroll;
+  height: 100%;
 }
 .app.modal.close {
   position:absolute;
@@ -76,9 +78,11 @@ html, body, #map { height: 100%; }
   }
 }
 @media all and (max-width: 599px) {
+  .app.about.text {
+    padding-bottom: 20px;
+  }
   .showNextTime {
     padding-top: 1em;
-    display: block !important;
   }
 }
 
