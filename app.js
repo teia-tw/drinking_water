@@ -107,7 +107,7 @@
     return component
   })(mapControl, screenSize)
 
-  var addStation = (function (map, modal, loading) {
+  var addStation = (function (map, modal, loading, screenSize) {
     var component = {}
     var $dialog = $('<div class="app add-station dialog"></div>')
     var $overlay = $('<div class="app add-station dialog overlay"></div>')
@@ -152,7 +152,7 @@
       $dialog.append(
         $anchor,
         $('<div class="add-station content ui form"><h4>加一個飲水點？</h4></div>')
-        .append($add, $cancel, '<p>飲水點資料，將經過開放街圖社群的回饋而加入資料庫中。請儘量提供完整訊息，以協助社群驗證資料正確性。</p>')
+        .append($add, $cancel, '<p>請儘量提供完整訊息，以協助社群驗證資料正確性。</p>')
       )
       component.pointTo(point.x, point.y)
       $dialog.show()
@@ -169,11 +169,23 @@
       var topBottomThreshold = Math.max($dialog.outerHeight() + 50, ($(window).height() / 3))
       var direction = (y < topBottomThreshold ? 'b' : 't') + (x < leftRightThreshhold ? 'r' : 'l')
       $dialog.addClass(direction)
-      $dialog.css({
-        top: (direction[0] === 'b' ? y : y - $dialog.outerHeight()),
-        left: (direction[1] === 'r' ? x : x - $dialog.outerWidth()),
-        maxWidth: 300
-      })
+      if (screenSize() === 'small')  {
+        $dialog.css({
+          top: (direction[0] === 'b' ? y : y - $dialog.outerHeight()),
+          left: 0,
+          right: 0
+        })
+        $anchor.css({
+          left: x,
+          zIndex: 10
+        })
+      } else {
+        $dialog.css({
+          top: (direction[0] === 'b' ? y : y - $dialog.outerHeight()),
+          left: (direction[1] === 'r' ? x : x - $dialog.outerWidth()),
+          maxWidth: 300
+        })
+      }
     }
     component.fillData = function () {
       component.close()
@@ -212,7 +224,6 @@
         }).toArray().join(' ')
       $.post('http://api.openstreetmap.org/api/0.6/notes.json?lat=' + latLng.lat + '&lon=' + latLng.lng + '&text=' + encodeURIComponent(noteText), '', function (data, ok, ajax) {
         loading.close()
-        console.log(data)
       //'<p><a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">一起編輯飲水地圖</a></p>' +
         var $content = $('<form class="app add-station ui form"><h4>資料已上傳至開放街圖</h4><p><a href="https://www.openstreetmap.org/#map=18/' + data.geometry.coordinates[1] + '/' + data.geometry.coordinates[0] + '" target="_blank">開放街圖</a>是自由而且開源的全球地圖，由像你一樣的使用者所繪製。如果你願意協助編輯<a href="https://www.openstreetmap.org/note/' + data.properties.id + '" target="_blank">剛才新增的飲水點資料</a>，可參考開放街圖社群所提供的 <a href="https://osmtw.hackpad.com/Note-5FCtyE3QsJE" target="_blank">Note 編修說明書</a>。</p></form>')
         var $ok = $('<button class="ui primary button">好</button>')
@@ -224,7 +235,7 @@
       })
     }
     return component
-  })(map, modal, loading)
+  })(map, modal, loading, screenSize)
 
   function userLocator (map, s) {
     var settings = s || {
@@ -320,17 +331,19 @@
       $showNextTime.click(function (e) {
         window.localStorage.showNextTime = $(this).children('input[type="checkbox"]')[0].checked
       })
-      $locator.css(locatorShadow)
-      modal.scroll(function () {
-        if ($(this).scrollTop() === 0) {
-          $locator.css(locatorShadow)
-        } else {
-          $locator.css({
-            position: 'inherit',
-            boxShadow: 'none'
-          })
-        }
-      })
+      if (screenSize() === 'small') {
+        $locator.css(locatorShadow)
+        modal.scroll(function () {
+          if ($(this).scrollTop() === 0) {
+            $locator.css(locatorShadow)
+          } else {
+            $locator.css({
+              position: 'inherit',
+              boxShadow: 'none'
+            })
+          }
+        })
+      }
       $locator.click(function (e) {
         e.preventDefault()
         locator.start()
