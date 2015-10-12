@@ -166,7 +166,7 @@
     }
     component.pointTo = function (x, y) {
       var leftRightThreshhold = Math.floor($(window).width() / 2)
-      var topBottomThreshold = Math.max($dialog.outerHeight() + 50, ($(window).height() / 3))
+      var topBottomThreshold = Math.max($dialog.outerHeight(), ($(window).height() * 1 / 5))
       var direction = (y < topBottomThreshold ? 'b' : 't') + (x < leftRightThreshhold ? 'r' : 'l')
       $dialog.addClass(direction)
       if (screenSize() === 'small')  {
@@ -180,11 +180,18 @@
           zIndex: 10
         })
       } else {
+        var xx =  x - $dialog.outerWidth() < 0 ? 0 : x - $dialog.outerWidth()
         $dialog.css({
           top: (direction[0] === 'b' ? y : y - $dialog.outerHeight()),
-          left: (direction[1] === 'r' ? x : x - $dialog.outerWidth()),
+          left: (direction[1] === 'r' ? x : xx),
           maxWidth: 300
         })
+        if (x - $dialog.outerWidth() < 0) {
+          $anchor.css({
+            right: $dialog.outerWidth() - x,
+            zIndex: 10
+          })
+        }
       }
     }
     component.fillData = function () {
