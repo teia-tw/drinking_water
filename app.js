@@ -151,8 +151,8 @@
 
       $dialog.append(
         $anchor,
-        $('<div class="add-station content ui form"><h4>加一個飲水點？</h4><p>飲水點資料，將經過開放街圖社群的回饋而加入資料庫中。請儘量提供完整訊息，以協助社群驗證資料正確性。</p></div>')
-        .append($add, $cancel)
+        $('<div class="add-station content ui form"><h4>加一個飲水點？</h4></div>')
+        .append($add, $cancel, '<p>飲水點資料，將經過開放街圖社群的回饋而加入資料庫中。請儘量提供完整訊息，以協助社群驗證資料正確性。</p>')
       )
       component.pointTo(point.x, point.y)
       $dialog.show()
