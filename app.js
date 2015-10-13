@@ -115,6 +115,7 @@
     var $cancel = $('<button class="ui button">取消</button>')
     var $submit = $('<button class="ui submit primary button">送出</button>')
     var $anchor = $('<i class="add-station anchor"></i>')
+    var $close = $('<a class="app dialog close" href="#">close</a>')
     var $fieldDescription = $('<div class="field"><label>飲水點說明</label><input name="description" placeholder="位置、負責單位、如何找到它⋯⋯" type="text"></div>')
     var $fieldTemperature = $('<div class="inline fields"><label>水溫</label>' +
       '<div class="field"><div class="ui checkbox"><input name="iced" value="iced" type="checkbox"><label>冰</label></div></div>' +
@@ -148,8 +149,13 @@
         e.preventDefault()
         component.close()
       })
+      $close.click(function (e) {
+        e.preventDefault()
+        component.close()
+      })
 
       $dialog.append(
+        $close,
         $anchor,
         $('<div class="add-station content ui form"><h4>加一個飲水點？</h4></div>')
         .append($add, $cancel, '<p>請儘量提供完整訊息，以協助社群驗證資料正確性。</p>')
@@ -172,11 +178,11 @@
       if (screenSize() === 'small')  {
         $dialog.css({
           top: (direction[0] === 'b' ? y : y - $dialog.outerHeight()),
-          left: 0,
-          right: 0
+          left: 8,
+          right: 8
         })
         $anchor.css({
-          left: x,
+          left: x - 8 - 15, // 8 (container spacing) + 15 (icon width/2)
           zIndex: 10
         })
       } else {

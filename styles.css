@@ -96,6 +96,16 @@ html, body, #map { height: 100%; }
   padding: 8px;
   z-index: 9999;
 }
+.app.dialog.close {
+  position:absolute;
+  background:url(close.png) 0 0 no-repeat;
+  width:24px;
+  height:27px;
+  display:block;
+  text-indent:-9999px;
+  top:-7px;
+  right:-7px;
+}
 
 .add-station.content {
   border-radius: 8px;
