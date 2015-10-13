@@ -326,8 +326,16 @@
       '<p>自備環保杯是個絕佳的選擇，但是喝完自備的水後怎麼辦？</p>' +
       '<p>從現在開始，我們要讓帶環保杯的朋友，可以快速的找到補水地點，讓大家隨心所欲的喝水保健康。</p>' +
       '<p>此外，<a href="http://www.e-info.org.tw/" target="_blank">台灣環境資訊協會</a>懇請大家，少喝瓶裝水，努力減少塑膠瓶及瓶蓋等海洋垃圾，減少海鳥、海龜、鯨豚…等海洋生物吞食這些塑膠垃圾而痛苦至死。您的努力，也將是他們活命的機會！</p>' +
+      '<h4>使用說明</h4>' +
+      '<ul><li>點選「顯示我的位置」可以把地圖捲動到你的所在地。</li>' +
+      '<li>如果你知道這個地點有飲水機，但地圖上沒有，可以（在手機上）長按或（在電腦上）右鍵點擊該處，提供飲水點資料。</li>' +
+      '</ul>' +
+      '<h4>關於本計劃</h4>' +
+      '<p>本計劃由<a href="http://www.e-info.org.tw/" target="_blank">台灣環境資訊協會</a>發起，感謝<a href="https://www.openstreetmap.org/" target="_blank">開放街圖</a>與<a href="http://openstreetmap.tw/" target="_blank">台灣開放街圖社群</a>提供資料庫與技術支援。</p>' +
       '<p><a href="http://beta.hackfoldr.org/drinking-water/" target="_blank">計劃網站</a></p>' +
-      '<p><a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a></p></div>')
+      '<p><a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a></p>' +
+      '<p><a href="http://donate.openstreetmap.org/" target="_blank">捐款給開放街圖基金會</a></p>' +
+      '</div>')
     var $showNextTime = $('<div class="ui showNextTime checkbox"><input name="showNextTime" type="checkbox"><label>下次顯示</label></div>')
     var $locator = $('<div class="ui locator primary labeled icon button"><i class="map icon"></i>顯示我的位置</div>')
     var locatorShadow = {
