@@ -237,7 +237,6 @@
         }).toArray().join(' ')
       $.post('http://api.openstreetmap.org/api/0.6/notes.json?lat=' + latLng.lat + '&lon=' + latLng.lng + '&text=' + encodeURIComponent(noteText), '', function (data, ok, ajax) {
         loading.close()
-      //'<p><a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">一起編輯飲水地圖</a></p>' +
         var $content = $('<form class="app add-station ui form"><h4>資料已上傳至開放街圖</h4><p><a href="https://www.openstreetmap.org/#map=18/' + data.geometry.coordinates[1] + '/' + data.geometry.coordinates[0] + '" target="_blank">開放街圖</a>是自由而且開源的全球地圖，由像你一樣的使用者所繪製。如果你願意協助編輯<a href="https://www.openstreetmap.org/note/' + data.properties.id + '" target="_blank">剛才新增的飲水點資料</a>，可參考開放街圖社群所提供的 <a href="https://osmtw.hackpad.com/Note-5FCtyE3QsJE" target="_blank">Note 編修說明書</a>。</p></form>')
         var $ok = $('<button class="ui primary button">好</button>')
         $ok.click(function () {
@@ -329,7 +328,7 @@
       '<h4>使用說明</h4>' +
       '<ul><li>點選「顯示我的位置」可以把地圖捲動到你的所在地。</li>' +
       '<li>如果你知道這個地點有飲水機，但地圖上沒有，可以（在手機上）長按或（在電腦上）右鍵點擊該處，提供飲水點資料。</li>' +
-      '<li>如果你有開放地圖的帳號，歡迎參考這份<a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">說明</a>，一起編輯飲水地圖。</li>' +
+      '<li>如果你有<a href="https://www.openstreetmap.org/" target="_blank">開放街圖</a>的帳號，歡迎參考這份<a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">說明</a>，一起編輯飲水地圖。</li>' +
       '</ul>' +
       '<h4>關於本計劃</h4>' +
       '<p>本計劃由<a href="http://www.e-info.org.tw/" target="_blank">台灣環境資訊協會</a>發起，感謝<a href="https://www.openstreetmap.org/" target="_blank">開放街圖</a>與<a href="http://openstreetmap.tw/" target="_blank">台灣開放街圖社群</a>提供資料庫與技術支援。</p>' +
