@@ -1,6 +1,6 @@
 (function ($, L) {
   function screenSize () {
-    return $(window).width() > 400 ? 'large' : 'small'
+    return $(window).width() > 600 ? 'large' : 'small'
   }
 
   var map = new L.Map('map')
@@ -135,6 +135,8 @@
     var point
 
     component.mount = function () {
+      $overlay.hide()
+      $dialog.hide()
       $('body').append($overlay, $dialog)
     }
     component.open = function (opt) {
