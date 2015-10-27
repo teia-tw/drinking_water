@@ -330,7 +330,7 @@
       '<h4>使用說明</h4>' +
       '<ul><li>點選「顯示我的位置」可以把地圖捲動到你的所在地。</li>' +
       '<li>如果你知道這個地點有飲水機，但地圖上沒有，可以（在手機上）長按或（在電腦上）右鍵點擊該處，提供飲水點資料。</li>' +
-      '<li>如果你有<a href="https://www.openstreetmap.org/" target="_blank">開放街圖</a>的帳號，歡迎參考這份<a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">說明</a>，一起編輯飲水地圖。</li>' +
+      '<li>如果你有<a href="https://www.openstreetmap.org/" target="_blank">開放街圖</a>的帳號，歡迎參考這份<a href="https://docs.google.com/document/d/1by9-SqfJ6qvu0dGER4E63bKsvGp3LhoqK86XFHHM_JI/edit?usp=sharing" target="_blank">說明</a>，一起編輯飲水地圖。請見<a href="notes.html" target="_blank">飲水點資料列表</a>。</li>' +
       '</ul>' +
       '<h4>關於本計劃</h4>' +
       '<p>本計劃由<a href="http://www.e-info.org.tw/" target="_blank">台灣環境資訊協會</a>發起，感謝<a href="https://www.openstreetmap.org/" target="_blank">開放街圖</a>與<a href="http://openstreetmap.tw/" target="_blank">台灣開放街圖社群</a>提供資料庫與技術支援。</p>' +
