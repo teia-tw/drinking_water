@@ -129,7 +129,7 @@
       '<div class="field"><div class="ui radio checkbox"><input name="indoor" type="radio" value="no"                   ><label>室外</label></div></div>' +
       '</div>')
     var $fieldLevel = $('<div class="inline fields"><label>樓層</label>' +
-      '<div class="field"><select class="ui search selection dropdown"><option value="-5">B5</option><option value="-4">B4</option><option value="-3">B3</option><option value="-2">B2</option><option value="-1">B1</option><option value="0" selected="selected">GF</option><option value="1" selected="selected">1F</option><option value="2">2F</option><option value="3">3F</option><option value="4">4F</option><option value="5">5F</option><option value="6">6F</option><option value="7">7F</option><option value="8">8F</option><option value="9">9F</option><option value="10">10F</option></select></div>' +
+      '<div class="field"><select class="ui search selection dropdown"><option value="-5">B5</option><option value="-4">B4</option><option value="-3">B3</option><option value="-2">B2</option><option value="-1">B1</option><option value="0">GF</option><option value="1" selected="selected">1F</option><option value="2">2F</option><option value="3">3F</option><option value="4">4F</option><option value="5">5F</option><option value="6">6F</option><option value="7">7F</option><option value="8">8F</option><option value="9">9F</option><option value="10">10F</option></select></div>' +
       '</div>')
     var $fieldPrecise = $('<div class="field"><div class="ui slider checkbox"><input name="precise" type="checkbox"><label>這個資訊是準確的</label></div></div>')
     var opened = false
