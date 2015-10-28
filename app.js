@@ -117,18 +117,19 @@
     var $anchor = $('<i class="add-station anchor"></i>')
     var $close = $('<a class="app dialog close" href="#">close</a>')
     var $fieldDescription = $('<div class="field"><label>飲水點說明</label><input name="description" placeholder="位置、負責單位、如何找到它⋯⋯" type="text"></div>')
+    var $fieldAddress = $('<div class="field"><label>地址</label><input name="address" placeholder="" type="text"></div>')
     var $fieldTemperature = $('<div class="inline fields"><label>水溫</label>' +
       '<div class="field"><div class="ui checkbox"><input name="iced" value="iced" type="checkbox"><label>冰</label></div></div>' +
       '<div class="field"><div class="ui checkbox"><input name="cold" value="cold" type="checkbox"><label>冷</label></div></div>' +
       '<div class="field"><div class="ui checkbox"><input name="warm" value="warm" type="checkbox"><label>溫</label></div></div>' +
       '<div class="field"><div class="ui checkbox"><input name="hot"  value="hot"  type="checkbox"><label>熱</label></div></div>' +
       '</div>')
-    var $fieldOutdoors = $('<div class="inline fields"><label>位置</label>' +
-      '<div class="field"><div class="ui radio checkbox"><input name="indoors" type="radio" value="indoors" checked="checked"><label>室內</label></div></div>' +
-      '<div class="field"><div class="ui radio checkbox"><input name="indoors" type="radio" value="outdoors"                 ><label>室外</label></div></div>' +
+    var $fieldIndoor = $('<div class="inline fields"><label>位置</label>' +
+      '<div class="field"><div class="ui radio checkbox"><input name="indoor" type="radio" value="yes" checked="checked"><label>室內</label></div></div>' +
+      '<div class="field"><div class="ui radio checkbox"><input name="indoor" type="radio" value="no"                   ><label>室外</label></div></div>' +
       '</div>')
     var $fieldLevel = $('<div class="inline fields"><label>樓層</label>' +
-      '<div class="field"><select class="ui search selection dropdown"><option value="-5">B5</option><option value="-4">B4</option><option value="-3">B3</option><option value="-2">B2</option><option value="-1">B1</option><option value="1" selected="selected">1F</option><option value="2">2F</option><option value="3">3F</option><option value="4">4F</option><option value="5">5F</option></select></div>' +
+      '<div class="field"><select class="ui search selection dropdown"><option value="-5">B5</option><option value="-4">B4</option><option value="-3">B3</option><option value="-2">B2</option><option value="-1">B1</option><option value="1" selected="selected">1F</option><option value="2">2F</option><option value="3">3F</option><option value="4">4F</option><option value="5">5F</option><option value="6">6F</option><option value="7">7F</option><option value="8">8F</option><option value="9">9F</option><option value="10">10F</option></select></div>' +
       '</div>')
     var $fieldPrecise = $('<div class="field"><div class="ui slider checkbox"><input name="precise" type="checkbox"><label>這個資訊是準確的</label></div></div>')
     var opened = false
@@ -214,7 +215,7 @@
       })
       var $content = $('<form class="app add-station ui form"></form>')
       $content.append(
-        $fieldDescription, $fieldTemperature, $fieldOutdoors, $fieldLevel,
+        $fieldDescription, $fieldTemperature, $fieldIndoor, $fieldLevel,
         $fieldPrecise)
       $content.append($submit, $cancel)
       modal.open($content)
@@ -225,11 +226,12 @@
       var latLng = map.containerPointToLatLng(point)
       var noteText = '#飲水地圖 #drinking_water\n' +
         '說明：' + $fieldDescription.children('input')[0].value + '\n' +
+        '地址：' + 'addr:full=' + $fieldAddress.children('input')[0].value + '\n' +
         '溫度：' + $fieldTemperature.find('input').map(function () {
-          return $(this).prop('checked') ? $(this).val() : null
+          return $(this).prop('checked') ? $(this).val() + '_water=yes' : null
         }).toArray().join(' ') + '\n' +
-        '位置：' + $fieldOutdoors.find('input').map(function () {
-          return $(this).prop('checked') ? $(this).val() : null
+        '位置：' + $fieldIndoor.find('input').map(function () {
+          return $(this).prop('checked') ? $(this).prop('name') + '=' + $(this).val() : null
         }).toArray().join(' ') + '\n' +
         '樓層：' + $fieldLevel.find('option').map(function () {
           return $(this).prop('selected') ? $(this).val() : null
