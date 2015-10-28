@@ -215,7 +215,7 @@
       })
       var $content = $('<form class="app add-station ui form"></form>')
       $content.append(
-        $fieldDescription, $fieldTemperature, $fieldIndoor, $fieldLevel,
+        $fieldDescription, $fieldAddress, $fieldTemperature, $fieldIndoor, $fieldLevel,
         $fieldPrecise)
       $content.append($submit, $cancel)
       modal.open($content)
