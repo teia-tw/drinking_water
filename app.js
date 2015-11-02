@@ -3,6 +3,38 @@
     return $(window).width() > 600 ? 'large' : 'small'
   }
 
+  var permalink = (function () {
+    var permalink = {}
+    var s = {
+      lat: undefined,
+      lng: undefined,
+      zoom: undefined
+    }
+    permalink.load = function (loc) {
+      var m = loc.hash.match(/^#map=(\d+)\/([\d\.]+)\/([\d\.]+)$/)
+      if (m !== null) {
+        s.zoom = m[1]
+        s.lat = m[2]
+        s.lng = m[3]
+      }
+    }
+    permalink.dumps = function () {
+      if (s.lat === undefined || s.lng === undefined || s.zoom === undefined) {
+        return ''
+      }
+      return '#map=' + s.zoom + '/' + s.lat + '/' + s.lng
+    }
+    ;['zoom', 'lat', 'lng'].forEach(function (n) {
+      permalink[n] = function () {
+        if (arguments.length > 0) {
+          s[n] = arguments[0]
+        }
+        return s[n]
+      }
+    })
+    return permalink
+  })()
+
   var map = new L.Map('map')
 
   var mapControl = (function () {
@@ -475,19 +507,37 @@
       }
     })())
     .on('load', function () {
+      if (permalink.dumps()) {
+        return
+      }
       if (about.willShowNextTime()) {
         about.open()
       } else {
         locator.start()
       }
     })
+    .on('moveend', function (e) {
+      permalink.lat(map.getCenter().lat)
+      permalink.lng(map.getCenter().lng)
+      window.location.hash = permalink.dumps()
+    })
+    .on('zoomend', function (e) {
+      permalink.zoom(map.getZoom())
+      window.location.hash = permalink.dumps()
+    })
 
   function appStart () {
+    permalink.load(window.location)
     loading.mount()
     modal.mount()
     addStation.mount()
-    map
-      .setView(new L.LatLng(25.0003133, 121.5388148), 15)
+    if (permalink.dumps() !== '') {
+      map
+        .setView(new L.LatLng(permalink.lat(), permalink.lng()), permalink.zoom())
+    } else {
+      map
+        .setView(new L.LatLng(25.0003133, 121.5388148), 15)
+    }
   }
   $(document).ready(appStart)
 })($, L)
