@@ -226,7 +226,7 @@
       var latLng = map.containerPointToLatLng(point)
       var noteText = '#飲水地圖 #drinking_water\n' +
         '說明：' + $fieldDescription.children('input')[0].value + '\n' +
-        '地址：' + 'addr:full=' + $fieldAddress.children('input')[0].value + '\n' +
+        '地址：' + ($fieldAddress.children('input')[0].value ? 'addr:full=' + $fieldAddress.children('input')[0].value : '') + '\n' +
         '溫度：' + $fieldTemperature.find('input').map(function () {
           return $(this).prop('checked') ? $(this).val() + '_water=yes' : null
         }).toArray().join(' ') + '\n' +
