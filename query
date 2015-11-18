@@ -1,0 +1,10 @@
+[out:json][timeout:25];
+{{geocodeArea:Taiwan}}->.searchArea;
+(
+  node["amenity"="water"](area.searchArea);
+  way["amenity"="water"](area.searchArea);
+  relation["amenity"="water"](area.searchArea);
+);
+out body;
+>;
+out skel qt;
