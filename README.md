@@ -12,6 +12,11 @@ http://drinking.teia.tw/
 
 此外，[台灣環境資訊協會](http://www.e-info.org.tw/)懇請大家，少喝瓶裝水，努力減少塑膠瓶及瓶蓋等海洋垃圾，減少海鳥、海龜、鯨豚…等海洋生物吞食這些塑膠垃圾而痛苦至死。您的努力，也將是他們活命的機會！
 
+相關連結
+--------
+
+* [計劃網站](http://beta.hackfoldr.org/drinking-water/)
+
 License
 -------
 
