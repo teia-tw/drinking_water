@@ -472,6 +472,8 @@
               '</div>' +
               (e.tags.description ? '<div class="description">' + e.tags.description + '</div>' : '') +
               (e.tags.level ? '<div class="level">' + e.tags.level + '</div>' : '') +
+              (e.tags.operator ? '<div class="operator">管理者：' + e.tags.operator + '</div>' : '') +
+              (e.tags.brand ? '<div class="brand">機型：' + e.tags.brand + '</div>' : '') +
               '</div>'
             var marker = L.marker(pos, {
               icon: waterDropIcon(),
