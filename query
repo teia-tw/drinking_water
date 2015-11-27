@@ -1,10 +1,11 @@
 [out:json][timeout:25];
-{{geocodeArea:Taiwan}}->.searchArea;
-(
-  node["amenity"="water"](area.searchArea);
-  way["amenity"="water"](area.searchArea);
-  relation["amenity"="water"](area.searchArea);
-);
-out body;
->;
-out skel qt;
+/*area(3600449220)->.searchArea;*/
+/*area["official_name"="中華民國"]->.searchArea;*/
+/*node.water(user:"pm5");*/
+/*3600000000 + 5011203*/
+/*2400000000 + 33406779*/
+/*node["amenity"="drinking_water"];*/
+area(3605011203)->.searchArea;
+rel(pivot.searchArea);
+node["amenity"="drinking_water"](area.searchArea);
+out;
