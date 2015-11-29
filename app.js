@@ -175,6 +175,11 @@
       $('body').append($overlay, $dialog)
     }
     component.open = function (opt) {
+      console.log(map.getZoom())
+      if (map.getZoom() < 17) {
+        window.alert('請放大到能清楚識別建物後，再行定位飲水點。')
+        return
+      }
       point = opt.containerPoint
       if (opened) return
       component.close()
