@@ -176,7 +176,7 @@
     }
     component.open = function (opt) {
       console.log(map.getZoom())
-      if (map.getZoom() < 17) {
+      if (map.getZoom() < 18) {
         window.alert('請放大到能清楚識別建物後，再行定位飲水點。')
         return
       }
