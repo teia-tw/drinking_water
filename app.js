@@ -297,7 +297,7 @@
   function userLocator (map, s) {
     var settings = s || {
       setView: true,
-      maxZoom: 17,
+      maxZoom: 18,
       tap: true
     }
     var component = {}
