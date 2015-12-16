@@ -148,8 +148,18 @@
     var $submit = $('<button class="ui submit primary button">送出</button>')
     var $anchor = $('<i class="add-station anchor"></i>')
     var $close = $('<a class="app dialog close" href="#">close</a>')
-    var $fieldDescription = $('<div class="field"><label>飲水點說明</label><input name="description" placeholder="請說明飲水點位置、如何找到它⋯⋯" type="text"></div>')
+// 開放時間
+// 對外開放 是 否 不確定 需要許可
+    var $fieldName = $('<div class="field"><label>名稱</label><input name="name" placeholder="建議使用讓別人一目瞭然的名稱" type="text"></div>')
+    var $fieldDescription = $('<div class="field"><label>飲水點說明</label><input name="description" placeholder="請說明飲水點位置、如何找到它等資訊" type="text"></div>')
     var $fieldAddress = $('<div class="field"><label>地址</label><input name="address" placeholder="" type="text"></div>')
+    var $fieldOpeningHours = $('<div class="field"><label>開放時間</label><input name="opening_hours" placeholder="如果有限制開放時間，請註明禮拜幾開放、幾點到幾點開放" type="text"></div>')
+    var $fieldAccess = $('<div class="inline fields"><label>對外開放</label>' +
+      '<div class="field"><div class="ui radio checkbox"><input name="access" type="radio" value="yes" checked="checked"><label>是</label></div></div>' +
+      '<div class="field"><div class="ui radio checkbox"><input name="access" type="radio" value="no"                   ><label>否</label></div></div>' +
+      '<div class="field"><div class="ui radio checkbox"><input name="access" type="radio" value="permissive"           ><label>需許可</label></div></div>' +
+      '<div class="field"><div class="ui radio checkbox"><input name="access" type="radio" value="unknown"              ><label>不確定</label></div></div>' +
+      '</div>')
     var $fieldTemperature = $('<div class="inline fields"><label>水溫</label>' +
       '<div class="field"><div class="ui checkbox"><input name="iced" value="iced" type="checkbox"><label>冰</label></div></div>' +
       '<div class="field"><div class="ui checkbox"><input name="cold" value="cold" type="checkbox"><label>冷</label></div></div>' +
@@ -163,8 +173,8 @@
     var $fieldLevel = $('<div class="inline fields"><label>樓層</label>' +
       '<div class="field"><select class="ui search selection dropdown"><option value="-5">B5</option><option value="-4">B4</option><option value="-3">B3</option><option value="-2">B2</option><option value="-1">B1</option><option value="0">GF</option><option value="1" selected="selected">1F</option><option value="2">2F</option><option value="3">3F</option><option value="4">4F</option><option value="5">5F</option><option value="6">6F</option><option value="7">7F</option><option value="8">8F</option><option value="9">9F</option><option value="10">10F</option></select></div>' +
       '</div>')
-    var $fieldOperator = $('<div class="field"><label>管理者</label><input name="operator" placeholder="負責人、負責單位⋯⋯" type="text"></div>')
-    var $fieldBrand = $('<div class="field"><label>機型</label><input name="brand" placeholder="飲水機廠牌、機型⋯⋯" type="text"></div>')
+    var $fieldOperator = $('<div class="field"><label>管理者</label><input name="operator" placeholder="負責人、負責單位" type="text"></div>')
+    var $fieldBrand = $('<div class="field"><label>機型</label><input name="brand" placeholder="飲水機廠牌、機型" type="text"></div>')
     var $fieldPrecise = $('<div class="field"><div class="ui slider checkbox"><input name="precise" type="checkbox"><label>這個資訊是準確的</label></div></div>')
     var opened = false
     var point
@@ -254,7 +264,8 @@
       })
       var $content = $('<form class="app add-station ui form"></form>')
       $content.append(
-        $fieldDescription, $fieldAddress, $fieldTemperature, $fieldIndoor, $fieldLevel,
+        $fieldName, $fieldDescription, $fieldAddress, $fieldOpeningHours,
+        $fieldAccess, $fieldTemperature, $fieldIndoor, $fieldLevel,
         $fieldOperator, $fieldBrand, $fieldPrecise)
       $content.append($submit, $cancel)
       modal.open($content)
@@ -264,8 +275,11 @@
       loading.open()
       var latLng = map.containerPointToLatLng(point)
       var noteText = '#飲水地圖 #drinking_water\n' +
+        '名稱：' + $fieldName.children('input')[0].value + '\n' +
         '說明：' + $fieldDescription.children('input')[0].value + '\n' +
         '地址：' + ($fieldAddress.children('input')[0].value ? 'addr:full=' + $fieldAddress.children('input')[0].value : '') + '\n' +
+        '開放時間：' + $fieldOpeningHours.children('input')[0].value + '\n' +
+        '對外開放：access=' + $fieldAccess.find('input').map(function () { return $(this).prop('checked') ? $(this).val() : null }).toArray().join(' ') + '\n' +
         '溫度：' + $fieldTemperature.find('input').map(function () {
           return $(this).prop('checked') ? $(this).val() + '_water=yes' : null
         }).toArray().join(' ') + '\n' +
