@@ -319,6 +319,7 @@
     var circle
 
     function onLocationFound (e) {
+      ga('send', 'event', 'navigate', 'locate', 'map')
       if (circle === undefined) {
         circle = L.circle(e.latlng, 200).addTo(map)
       } else {
@@ -338,6 +339,7 @@
       }
     })
     map.on('contextmenu', function (evt) {
+      ga('send', 'event', 'data', 'upload', 'note')
       addStation.open(evt)
     })
 
@@ -437,6 +439,7 @@
       return function () {
         var map = this
         function onClick (e) {
+          ga('send', 'event', 'navigate', 'view', 'about')
           component.open()
         }
         L.easyButton('fa fa-question-circle', onClick, '關於飲水地圖', map)
@@ -545,10 +548,12 @@
       permalink.lat(map.getCenter().lat)
       permalink.lng(map.getCenter().lng)
       window.location.hash = permalink.dumps()
+      ga('send', 'event', 'navigate', 'move', 'map')
     })
     .on('zoomend', function (e) {
       permalink.zoom(map.getZoom())
       window.location.hash = permalink.dumps()
+      ga('send', 'event', 'navigate', 'zoom', 'map')
     })
 
   function appStart () {
