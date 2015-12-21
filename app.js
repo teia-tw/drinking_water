@@ -3,6 +3,9 @@
     return $(window).width() > 600 ? 'large' : 'small'
   }
 
+  var donateTEIA = $('<a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a>')
+  var donateOSMTW = $('<a href="https://ocf.neticrm.tw/civicrm/contribute/transact?reset=1&id=16" target="_blank">捐款給台灣開放街圖社群</a>')
+
   var permalink = (function () {
     var permalink = {}
     var s = {
@@ -394,9 +397,8 @@
       '<h4>關於本計劃</h4>' +
       '<p>本計劃由<a href="http://www.e-info.org.tw/" target="_blank">台灣環境資訊協會</a>發起，感謝<a href="https://www.openstreetmap.org/" target="_blank">開放街圖</a>與<a href="http://openstreetmap.tw/" target="_blank">台灣開放街圖社群</a>提供資料庫與技術支援。</p>' +
       '<p><a href="http://beta.hackfoldr.org/drinking-water/" target="_blank">計劃網站</a></p>' +
-      '<p><a href="https://e-info.neticrm.tw/civicrm/contribute/transact?reset=1&id=9" target="_blank">捐款給台灣環境資訊協會</a></p>' +
-      '<p><a href="https://ocf.neticrm.tw/civicrm/contribute/transact?reset=1&id=16" target="_blank">捐款給台灣開放街圖社群</a></p>' +
       '</div>')
+    $content.append($('<p></p>').append(donateTEIA), $('<p></p>').append(donateOSMTW))
     var $showNextTime = $('<div class="ui showNextTime checkbox"><input name="showNextTime" type="checkbox"><label>下次顯示</label></div>')
     var $locator = $('<div class="ui locator primary labeled icon button"><i class="map icon"></i>顯示我的位置</div>')
     var locatorShadow = {
@@ -561,6 +563,12 @@
     loading.mount()
     modal.mount()
     addStation.mount()
+    donateTEIA.on('click', function () {
+      ga('send', 'event', 'outbound', 'donate', 'TEIA')
+    })
+    donateOSM.on('click', function () {
+      ga('send', 'event', 'outbound', 'donate', 'OSM')
+    })
     if (permalink.dumps() !== '') {
       map
         .setView(new L.LatLng(permalink.lat(), permalink.lng()), permalink.zoom())
