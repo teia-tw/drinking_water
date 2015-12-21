@@ -566,7 +566,7 @@
     donateTEIA.on('click', function () {
       ga('send', 'event', 'outbound', 'donate', 'TEIA')
     })
-    donateOSM.on('click', function () {
+    donateOSMTW.on('click', function () {
       ga('send', 'event', 'outbound', 'donate', 'OSM')
     })
     if (permalink.dumps() !== '') {
